@@ -59,7 +59,7 @@ namespace OpenSpaceImplementation {
             // 0,0 is top left
             // 1000,1000 is bottom right
 
-            Canvas canvas = GameObject.Find("TextCanvas").GetComponent<Canvas>();
+            Canvas canvas = GlobalController.TextCanvas;
 
             Transform textTransform = canvas.transform.Find("Text" + textIndex);
             if (textTransform == null) {

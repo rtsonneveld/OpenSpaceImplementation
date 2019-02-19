@@ -128,12 +128,12 @@ namespace OpenSpaceImplementation {
 
         public float PadHorizontalAxis()
         {
-            return (Input.GetAxisRaw("Horizontal") * 160) *0.5f;
+            return (UnityEngine.Input.GetAxisRaw("Horizontal") * 160) *0.5f;
         }
 
         public float PadVerticalAxis()
         {
-            return (-Input.GetAxisRaw("Vertical") * 160) * 0.5f;
+            return (-UnityEngine.Input.GetAxisRaw("Vertical") * 160) * 0.5f;
         }
 
         public float Func_AbsoluteValue(float v)
