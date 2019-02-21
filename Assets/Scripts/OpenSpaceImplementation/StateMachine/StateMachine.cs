@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using OpenSpaceImplementation.AI;
 
 namespace OpenSpaceImplementation {
     public class StateMachine {
 
         //List<Macro> macros;
-        Perso Perso;
+        OpenSpaceImplementation.AI.Perso Perso;
 
         public State ActiveState;
 
@@ -16,7 +17,7 @@ namespace OpenSpaceImplementation {
 
         private bool delayUpdate = false; // Updates need to be delayed one frame when an object has just been created
 
-        public StateMachine(Perso perso)
+        public StateMachine(OpenSpaceImplementation.AI.Perso perso)
         {
             this.Perso = perso;
 

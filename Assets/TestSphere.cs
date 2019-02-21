@@ -15,7 +15,7 @@ public class TestSphere : MonoBehaviour
     void Update()
     {
 
-        if (GlobalController.InputManager.CheckSequenceJustEntered("hello")) {
+        if (Controller.InputManager.CheckSequenceJustEntered("hello")) {
             this.transform.position += new Vector3(0, 0.5f, 0);
         }
     }

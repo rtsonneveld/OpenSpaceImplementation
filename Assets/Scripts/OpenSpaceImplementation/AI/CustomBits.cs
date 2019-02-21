@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenSpaceImplementation {
+namespace OpenSpaceImplementation.AI {
     public class CustomBits {
         private bool[] bits;
 

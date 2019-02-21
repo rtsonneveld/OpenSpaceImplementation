@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace OpenSpaceImplementation {
+namespace OpenSpaceImplementation.Overlay {
     public class TextObjectsManager : MonoBehaviour {
         public GameObject textLayerPrefab;
         public int textLayers = 256;

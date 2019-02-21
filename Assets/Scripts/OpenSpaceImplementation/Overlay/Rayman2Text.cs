@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace OpenSpaceImplementation {
+namespace OpenSpaceImplementation.Overlay {
     public class Rayman2Text {
 
         public string textContent;
@@ -59,7 +59,7 @@ namespace OpenSpaceImplementation {
             // 0,0 is top left
             // 1000,1000 is bottom right
 
-            Canvas canvas = GlobalController.TextCanvas;
+            Canvas canvas = Controller.TextCanvas;
 
             Transform textTransform = canvas.transform.Find("Text" + textIndex);
             if (textTransform == null) {

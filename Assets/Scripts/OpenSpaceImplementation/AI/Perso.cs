@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace OpenSpaceImplementation {
+namespace OpenSpaceImplementation.AI {
     public partial class Perso : MonoBehaviour {
 
         protected StateMachine smRule;
@@ -13,9 +13,19 @@ namespace OpenSpaceImplementation {
 
         public CustomBits customBits;
 
+        // Health, air magic
+        public int MaxHitPoints;
+        public int HitPoints;
+
+        public int MaxAirPoints;
+        public int AirPoints;
+
+        public int MaxMagicPoints;
+        public int MagicPoints;
+
         // Used for scripts:
         protected int globalRandomizer;
-        private float timeSinceLastFrame;
+        protected float timeSinceLastFrame;
 
         public string ActiveRule
         {

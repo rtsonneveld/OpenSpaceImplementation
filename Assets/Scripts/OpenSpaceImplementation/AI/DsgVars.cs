@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenSpaceImplementation.Strings;
 
-namespace OpenSpaceImplementation {
+namespace OpenSpaceImplementation.AI {
 
     public class DsgVarBase {
         public object value;
@@ -28,21 +29,24 @@ namespace OpenSpaceImplementation {
         {
             return (short)d.value;
         }
+
+        public static T CreateDsgVar<T>(object value) where T:DsgVarBase, new()
+        {
+            T dsgVar = new T();
+            dsgVar.value = value;
+            return dsgVar;
+        }
     }
 
     public class DsgVarBool : DsgVarBase {
         public static implicit operator DsgVarBool(int v)
         {
-            DsgVarBool d = new DsgVarBool();
-            d.value = v > 0 ? true : false;
-            return d;
+            return CreateDsgVar<DsgVarBool>(v > 0 ? true : false);
         }
 
         public static implicit operator DsgVarBool(bool v)
         {
-            DsgVarBool d = new DsgVarBool();
-            d.value = v;
-            return d;
+            return CreateDsgVar<DsgVarBool>(v);
         }
 
         public static implicit operator bool(DsgVarBool d)
@@ -54,70 +58,61 @@ namespace OpenSpaceImplementation {
     public class DsgVarByte : DsgVarBase {
         public static implicit operator DsgVarByte(byte v)
         {
-            DsgVarByte d = new DsgVarByte();
-            d.value = (byte)v;
-            return d;
+            return CreateDsgVar<DsgVarByte>((byte)v);
         }
         public static implicit operator DsgVarByte(int v)
         {
-            DsgVarByte d = new DsgVarByte();
-            d.value = (byte)v;
-            return d;
+            return CreateDsgVar<DsgVarByte>((byte)v);
+        }
+        public static implicit operator DsgVarByte(float v)
+        {
+            return CreateDsgVar<DsgVarByte>((byte)v);
         }
 
         public static implicit operator DsgVarByte(DsgVarInt v)
         {
-            DsgVarByte d = new DsgVarByte();
-            d.value = (byte)v;
-            return d;
+            return CreateDsgVar<DsgVarByte>((byte)v);
         }
 
     };
     public class DsgVarUByte : DsgVarBase {
         public static implicit operator DsgVarUByte(byte v)
         {
-            DsgVarUByte d = new DsgVarUByte();
-            d.value = (byte)v;
-            return d;
+            return CreateDsgVar<DsgVarUByte>((byte)v);
         }
         public static implicit operator DsgVarUByte(int v)
         {
-            DsgVarUByte d = new DsgVarUByte();
-            d.value = (byte)v;
-            return d;
+            return CreateDsgVar<DsgVarUByte>((byte)v);
         }
     };
 
     public class DsgVarShort : DsgVarBase {
         public static implicit operator DsgVarShort(int v)
         {
-            DsgVarShort d = new DsgVarShort();
-            d.value = (short)v;
-            return d;
+            return CreateDsgVar<DsgVarShort>((short)v);
         }
     };
     public class DsgVarUShort : DsgVarBase {
         public static implicit operator DsgVarUShort(int v)
         {
-            DsgVarUShort d = new DsgVarUShort();
-            d.value = (ushort)v;
-            return d;
+            return CreateDsgVar<DsgVarUShort>((ushort)v);
         }
     };
 
     public class DsgVarInt : DsgVarBase {
         public static implicit operator DsgVarInt(int v)
         {
-            DsgVarInt d = new DsgVarInt();
-            d.value = v;
-            return d;
+            return CreateDsgVar<DsgVarInt>(v);
         }
 
         public static implicit operator DsgVarInt(float v)
         {
-            DsgVarInt d = new DsgVarInt();
-            d.value = (int)Math.Round(v);
-            return d;
+            return CreateDsgVar<DsgVarInt>((int)Math.Round(v));
+        }
+
+        public static implicit operator bool(DsgVarInt d)
+        {
+            return ((int)d.value != 0) ? true : false;
         }
     };
 
@@ -125,36 +120,33 @@ namespace OpenSpaceImplementation {
 
         public static implicit operator DsgVarUInt(uint v)
         {
-            DsgVarUInt d = new DsgVarUInt();
-            d.value = v;
-            return d;
+            return CreateDsgVar<DsgVarUInt>(v);
         }
 
         public static implicit operator DsgVarUInt(float v)
         {
-            DsgVarUInt d = new DsgVarUInt();
-            d.value = (uint)Math.Round(v);
-            return d;
+            return CreateDsgVar<DsgVarUInt>((uint)Math.Round(v));
         }
     };
     public class DsgVarFloat : DsgVarBase {
 
         public static implicit operator DsgVarFloat(int v)
         {
-            DsgVarFloat d = new DsgVarFloat();
-            d.value = (float)v;
-            return d;
+            return CreateDsgVar<DsgVarFloat>((float)v);
         }
 
         public static implicit operator DsgVarFloat(float v)
         {
-            DsgVarFloat d = new DsgVarFloat();
-            d.value = v;
-            return d;
+            return CreateDsgVar<DsgVarFloat>(v);
         }
     };
 
-    public class DsgVarString : DsgVarBase { };
+    public class DsgVarString : DsgVarBase {
+        public static implicit operator DsgVarString(string str)
+        {
+            return CreateDsgVar<DsgVarString>(str);
+        }
+    };
     public class DsgVarTextRef : DsgVarBase { };
 
 }
