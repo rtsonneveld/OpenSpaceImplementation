@@ -8,13 +8,24 @@ using OpenSpaceImplementation.Strings;
 
 namespace OpenSpaceImplementation {
 
-    public class Controller {
+    public class Controller : MonoBehaviour {
+
+        public string ResourceFolder = "";
+        public Settings settings = Settings.R2PC;
 
         private static GameObject controllerGAO
         {
             get
             {
-                return GameObject.Find("GlobalController");
+                return GameObject.Find("Controller");
+            }
+        }
+
+        public static Controller ControllerInstance
+        {
+            get
+            {
+                return controllerGAO.GetComponent<Controller>();
             }
         }
 

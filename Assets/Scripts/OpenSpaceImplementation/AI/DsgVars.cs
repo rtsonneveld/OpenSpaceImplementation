@@ -139,6 +139,11 @@ namespace OpenSpaceImplementation.AI {
         {
             return CreateDsgVar<DsgVarFloat>(v);
         }
+
+        public static implicit operator bool(DsgVarFloat d)
+        {
+            return ((float)d.value != 0) ? true : false;
+        }
     };
 
     public class DsgVarString : DsgVarBase {
@@ -148,5 +153,9 @@ namespace OpenSpaceImplementation.AI {
         }
     };
     public class DsgVarTextRef : DsgVarBase { };
+
+    public class DsgVarList {
+        // TODO: stub
+    }
 
 }

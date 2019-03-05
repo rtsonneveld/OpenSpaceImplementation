@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using OpenSpaceImplementation.Animation;
 
 namespace OpenSpaceImplementation.AI {
     public partial class Perso : MonoBehaviour {
@@ -26,6 +28,9 @@ namespace OpenSpaceImplementation.AI {
         // Used for scripts:
         protected int globalRandomizer;
         protected float timeSinceLastFrame;
+
+        public Perso CreatedBy { get; set; }
+        public List<Perso> CreatedAlwaysObjects { get; set; }
 
         public string ActiveRule
         {
@@ -77,6 +82,16 @@ namespace OpenSpaceImplementation.AI {
         {
             this.smRule?.DelayUpdate();
             this.smReflex?.DelayUpdate();
+        }
+
+        public Animation.Action GetAction(int actionIndex)
+        {
+            return null; // TODO: stub
+        }
+
+        public Animation.Module GetModule(int moduleIndex)
+        {
+            return null; // TODO: stub
         }
     }
 }

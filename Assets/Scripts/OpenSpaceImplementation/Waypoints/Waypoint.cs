@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 namespace OpenSpaceImplementation.Waypoints {
-    public class Waypoint {
-        public Vector3 position;
+    public class WayPoint {
+        public Vector3 Position;
+        public float Radius;
+
+        public static WayPoint FromOffset(string v)
+        {
+            return null; // TODO: stub
+        }
     }
 }

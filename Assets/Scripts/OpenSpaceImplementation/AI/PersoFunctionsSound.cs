@@ -12,24 +12,24 @@ namespace OpenSpaceImplementation.AI {
 
     public partial class Perso {
 
-        public void SOUND_SendSoundRequest(SoundEvent sound)
-        {
-            return; // TODO, stub
-        }
-
-        public void SOUND_SetVolumeAnim(int volume)
-        {
-            // TODO, stub
-        }
-
         public void SOUND_ResumeSound()
         {
-            // TODO, stub
+            // TODO: stub
         }
 
         public void SOUND_SendMenuSndRequest(SoundEvent sound)
         {
-            return; // TODO, stub
+            return; // TODO: stub
+        }
+
+        public void SOUND_SendSoundRequest(SoundEvent sound)
+        {
+            return; // TODO: stub
+        }
+
+        public void SOUND_SetVolumeAnim(int volume)
+        {
+            // TODO: stub
         }
     }
 }

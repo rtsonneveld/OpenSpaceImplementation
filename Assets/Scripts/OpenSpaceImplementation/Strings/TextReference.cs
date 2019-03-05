@@ -25,6 +25,11 @@ namespace OpenSpaceImplementation.Strings {
             return Controller.StringsManager.GetString(this.stringIndex);
         }
 
+        public void Overwrite(string v)
+        {
+            Controller.StringsManager.SetString(this.stringIndex, v);
+        }
+
         public static implicit operator string(TextReference t)
         {
             return t.ToString();

@@ -16,47 +16,67 @@ namespace OpenSpaceImplementation.AI {
 
         protected static bool u64 = false; // Nintendo 64 (Ultra 64)
 
-        public async Task TIME_FrozenWait(int milliseconds)
+        public void ACT_ChangeSpoFlag(int spoFlagIndex, DsgVarBool setFlag) // Index is probably 1-indexed
         {
-            await new WaitForSeconds(((float)milliseconds) / 1000.0f);
+            // TODO: stub
         }
 
-        public void Proc_DesactivateObject(Perso perso)
+        public bool ACT_GetBooleanInArray(List<DsgVarInt> array, int index)
         {
-            perso.gameObject.SetActive(false);
+            int arrayItem = array[(int)(index / 32)];
+            int bitNumber = index % 32;
+            return ((arrayItem & (1 << bitNumber - 1)) != 0 ? true : false);
+
+        }
+
+        public int ACT_GetNumberOfBooleanInArray(List<DsgVarInt> array, int startIndex, int endIndex)
+        {
             // TODO: test
-        }
+            int numberOfSetBits = 0;
 
-        public Perso Func_GenerateObject(Perso basePerso, Vector3 position)
-        {
-            return Func_GenerateObject(basePerso.GetType(), position);
-        }
-
-        static int instanceCounter = 0;
-
-        public Perso Func_GenerateObject(Type persoType, Vector3 position)
-        {
-            GameObject gameObject = new GameObject("Instanciated_"+persoType.Name+"_"+instanceCounter);
-            instanceCounter++;
-            Perso perso = (Perso)gameObject.AddComponent(persoType);
-            perso.DelayUpdate();
-
-            return perso;
-        }
-
-        public Perso GetPerso(string name)
-        {
-            return GameObject.Find(name)?.GetComponent<Perso>();
-        }
-
-        public T GetPerso<T>(string name) where T:Perso
-        {
-            Perso perso = this.GetPerso(name);
-            if (perso != null && perso is T) {
-                return (T)perso;
-            } else {
-                throw new Exception("Object "+perso+" is not an instance of the requested type");
+            for (int i = startIndex; i < endIndex; i++) {
+                if (ACT_GetBooleanInArray(array, i)) {
+                    numberOfSetBits++;
+                }
             }
+
+            return numberOfSetBits;
+        }
+
+        public void ACT_SetBrainComputeFreq(int frequency)
+        {
+            return; // TODO: stub
+        }
+
+        public void ActivateMenuMap(int activateMenu)
+        {
+            return; // TODO: stub
+        }
+
+        public bool Cond_Alw_IsMain(Perso perso) // Always is Mine (not Main, silly frenchies :P)
+        {
+            return (perso != null && perso.CreatedBy == this);
+        }
+
+        public bool Cond_IsCustomBitSet(int index)
+        {
+            // Rayman 2 uses indexes here that start with 1 instead of 0
+            return customBits.GetCustomBit(index - 1);
+        }
+
+        public void Proc_ChangeComport(Perso perso, Func<Task> action)
+        {
+            perso.smRule.SetState(action);
+        }
+
+        public void Proc_ChangeComportReflex(Perso perso, Func<Task> action)
+        {
+            perso.smReflex.SetState(action);
+        }
+
+        public bool Cond_IsInComport(Perso perso, Func<Task> action)
+        {
+            return perso.smRule.ActiveState.action == action;
         }
 
         public bool Cond_IsTimeElapsed(int timerVariable, int timeInMilliseconds)
@@ -73,15 +93,9 @@ namespace OpenSpaceImplementation.AI {
             return addedTimers >= timeInMilliseconds;
         }
 
-        public int Func_GetTime()
+        public bool Cond_IsValidObject(Perso perso)
         {
-            // Return time since level load in milliseconds
-            return (int)(Time.timeSinceLevelLoad * 1000);
-        }
-
-        public float Func_GetDeltaTime() // delta time as int is gross
-        {
-            return Time.deltaTime * 1000.0f;
+            return perso != null && perso.gameObject != null;
         }
 
         public void fn_p_stKillPersoAndClearVariableProcedure1(Perso perso)
@@ -91,9 +105,76 @@ namespace OpenSpaceImplementation.AI {
             }
         }
 
+        public int Func_CountGeneratedObjects(Perso perso)
+        {
+            return CreatedAlwaysObjects.Count((p => p != null));
+        }
+
+        public Perso Func_GenerateObject(Perso basePerso, Vector3 position)
+        {
+            return Func_GenerateObject(basePerso.GetType(), position);
+        }
+
+        public Perso Func_GenerateObject(Type persoType, Vector3 position)
+        {
+            GameObject gameObject = new GameObject("Instanciated_" + persoType.Name + "_" + Func_CountGeneratedObjects(this));
+            Perso newPerso = (Perso)gameObject.AddComponent(persoType);
+            newPerso.DelayUpdate();
+            newPerso.CreatedBy = this;
+            this.CreatedAlwaysObjects.Add(newPerso);
+
+            return newPerso;
+        }
+
+        public float Func_GetDeltaTime() // delta time as int is gross
+        {
+            return Time.deltaTime * 1000.0f;
+        }
+
+        public int Func_GetHitPoints(Perso perso)
+        {
+            return perso.HitPoints;
+        }
+
+        public int Func_GetHitPointsMax(Perso perso)
+        {
+            return perso.MaxHitPoints;
+        }
+
+        public int Func_GetTime()
+        {
+            // Return time since level load in milliseconds
+            return (int)(Time.timeSinceLevelLoad * 1000);
+        }
+
+        public Perso GetPerso(string name)
+        {
+            return GameObject.Find(name)?.GetComponent<Perso>();
+        }
+
+        public T GetPerso<T>(string name) where T : Perso
+        {
+            Perso perso = this.GetPerso(name);
+            if (perso != null && perso is T) {
+                return (T)perso;
+            } else {
+                throw new Exception("Object " + perso + " is not an instance of the requested type");
+            }
+        }
+
+        public void MAP_GetUsedExitIdentifier(DsgVarInt a, DsgVarInt b)
+        {
+            return; // TODO: stub
+        }
+
         public Vector3 Position()
         {
             return this.transform.position;
+        }
+
+        public void Proc_ChangeMap(string mapName)
+        {
+            return; // TODO: stub
         }
 
         public void Proc_ChangeOneCustomBit(int index, DsgVarBool value)
@@ -102,77 +183,26 @@ namespace OpenSpaceImplementation.AI {
             customBits.SetCustomBit(index - 1, value);
         }
 
-        public bool Cond_IsCustomBitSet(int index)
+        public void Proc_ActivateObject(Perso perso)
         {
-            // Rayman 2 uses indexes here that start with 1 instead of 0
-            return customBits.GetCustomBit(index - 1);
+            perso.gameObject.SetActive(true);
+            // TODO: test
         }
 
-        public bool Cond_IsValidObject(Perso perso)
+        public void Proc_DesactivateObject(Perso perso)
         {
-            return perso != null && perso.gameObject != null;
-        }
-
-        public int ACT_GetNumberOfBooleanInArray(List<DsgVarInt> array, int startIndex, int endIndex)
-        {
-            // TODO test
-            int numberOfSetBits = 0;
-
-            for (int i=startIndex;i<endIndex;i++) {
-                if (ACT_GetBooleanInArray(array, i)) {
-                    numberOfSetBits++;
-                }
-            }
-
-            return numberOfSetBits;
-        }
-
-        public bool ACT_GetBooleanInArray(List<DsgVarInt> array, int index)
-        {
-            int arrayItem = array[(int)(index / 32)];
-            int bitNumber = index % 32;
-            return ((arrayItem & (1 << bitNumber - 1)) != 0 ? true : false);
-
-        }
-
-        public void MAP_GetUsedExitIdentifier(DsgVarInt a, DsgVarInt b)
-        {
-            return; // TODO, stub
-        }
-
-        public void ACT_SetBrainComputeFreq(int frequency)
-        {
-            return; // TODO, stub
-        }
-
-        public void ActivateMenuMap(int activateMenu)
-        {
-            return; // TODO, stub
+            perso.gameObject.SetActive(false);
+            // TODO: test
         }
 
         public void Proc_HierFreezeEngine(int freezeEngine)
         {
-            return; // TODO, stub
+            return; // TODO: stub
         }
 
-        public void TEXT_FormatText(string text, TextReference a, TextReference b)
+        public void Proc_None()
         {
-            return; // TODO, stub
-        }
-
-        public int Func_GetHitPointsMax(Perso perso)
-        {
-            return perso.MaxHitPoints;
-        }
-
-        public int Func_GetHitPoints(Perso perso)
-        {
-            return perso.HitPoints;
-        }
-
-        public void Proc_SetHitPointsMax(Perso perso, int MaxHitPoints)
-        {
-            perso.MaxHitPoints = MaxHitPoints;
+            return; // Do nothing
         }
 
         public void Proc_SetHitPoints(Perso perso, int HitPoints)
@@ -180,9 +210,14 @@ namespace OpenSpaceImplementation.AI {
             perso.HitPoints = HitPoints > MaxHitPoints ? MaxHitPoints : HitPoints;
         }
 
-        public void Proc_ChangeMap(string mapName)
+        public void Proc_SetHitPointsMax(Perso perso, int MaxHitPoints)
         {
-            return; // TODO, stub
+            perso.MaxHitPoints = MaxHitPoints;
+        }
+
+        public async Task TIME_FrozenWait(int milliseconds)
+        {
+            await new WaitForSeconds(((float)milliseconds) / 1000.0f);
         }
     }
 }

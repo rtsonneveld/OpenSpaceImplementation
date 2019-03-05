@@ -12,14 +12,14 @@ namespace OpenSpaceImplementation.Strings {
         private int languageCount = 0;
         private int stringCount = 0;
 
-        private int currentLanguage = 0;
-
         public void InitTable(int languageCount, int stringCount)
         {
             this.languageCount = languageCount;
             this.stringCount = stringCount;
             this.textTable = new string[languageCount, stringCount];
         }
+
+        public int CurrentLanguage { get; set; }
 
         private bool CheckIndexValidity(int languageIndex, int stringIndex)
         {
@@ -41,7 +41,7 @@ namespace OpenSpaceImplementation.Strings {
             return true;
         }
 
-        public void SetString(int languageIndex, int stringIndex, string value)
+        public void SetStringForLanguage(int languageIndex, int stringIndex, string value)
         {
             if (CheckIndexValidity(languageIndex, stringIndex)) {
                 this.textTable[languageIndex, stringIndex] = value;
@@ -59,7 +59,12 @@ namespace OpenSpaceImplementation.Strings {
 
         public string GetString(int stringIndex)
         {
-            return GetStringForLanguage(this.currentLanguage, stringIndex);
+            return GetStringForLanguage(this.CurrentLanguage, stringIndex);
+        }
+
+        public void SetString(int stringIndex, string newString)
+        {
+            SetStringForLanguage(this.CurrentLanguage, stringIndex, newString);
         }
 
     }
