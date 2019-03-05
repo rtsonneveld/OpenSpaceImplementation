@@ -76,8 +76,8 @@ namespace OpenSpaceImplementation.Unity {
                 /*if (MapLoader.Loader.globals != null && MapLoader.Loader.globals.backgroundGameMaterial != null && MapLoader.Loader.globals.backgroundGameMaterial.visualMaterial != null) {
                     skyMaterial = MapLoader.Loader.globals.backgroundGameMaterial.visualMaterial;
                 } else {*/ 
-                    if (sectorManager != null && sectorManager.sectors != null && sectorManager.sectors.Count > 0) {
-                        foreach (Sector s in sectorManager.sectors) {
+                    if (sectorManager != null && sectorManager.Sectors != null && sectorManager.Sectors.Count > 0) {
+                        foreach (Sector s in sectorManager.Sectors.Values) {
                             if (!s.Active) continue;
                             if (s.skyMaterial != null && s.skyMaterial.textures.Count > 0 && s.skyMaterial.textures.Where(t => t.texture != null).Count() > 0) {
                                 skyMaterial = s.skyMaterial;
@@ -197,8 +197,8 @@ namespace OpenSpaceImplementation.Unity {
                 Register(lights[i]);
             }
             if (useDefaultSettings) {
-                luminosity = Settings.s.luminosity;
-                saturate = Settings.s.saturate;
+                luminosity = Controller.Settings.luminosity;
+                saturate = Controller.Settings.saturate;
             }
             loaded = true;
         }

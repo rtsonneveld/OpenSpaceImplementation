@@ -39,7 +39,7 @@ namespace OpenSpaceImplementation.Unity {
             }
             /*if (animate && !visMat.IsLockedAnimatedTexture) {
                 if (textureIndex >= 0 && textureIndex < visMat.animTextures.Count) {
-                    currentTime += Time.deltaTime * Mathf.Abs(Settings.s.textureAnimationSpeedModifier);
+                    currentTime += Time.deltaTime * Mathf.Abs(Controller.Settings.textureAnimationSpeedModifier);
                     float time = visMat.animTextures[currentTexture].time;
                     //float time = 1f / 30f;
                     while (currentTime >= time) {

@@ -12,7 +12,8 @@ namespace OpenSpaceImplementation.Visual {
     /// Basically a submesh
     /// </summary>
     public class MeshElement : IGeometricElement {
-        public MeshObject mesh;
+
+        public MeshObject Mesh { get; set; }
 
         public GameMaterial gameMaterial;
         public VisualMaterial visualMaterial;
@@ -49,16 +50,12 @@ namespace OpenSpaceImplementation.Visual {
         public GameObject Gao {
             get {
                 if (gao == null) {
-                    gao = new GameObject();// Create object and read triangle data
+                    gao = new GameObject("Mesh Element");// Create object and read triangle data
                     gao.layer = LayerMask.NameToLayer("Visual");
                     CreateUnityMesh();
                 }
                 return gao;
             }
-        }
-
-        public MeshElement(MeshObject mesh) {
-            this.mesh = mesh;
         }
 
         private void CreateUnityMesh() {
@@ -69,7 +66,7 @@ namespace OpenSpaceImplementation.Visual {
                     mesh.bones.bindPoses[j] = mesh.bones.bones[j].worldToLocalMatrix * gao.transform.localToWorldMatrix;
                 }
             }*/
-            VisualMaterial.Hint materialHints = mesh.lookAtMode != 0 ? VisualMaterial.Hint.Billboard : VisualMaterial.Hint.None;
+            VisualMaterial.Hint materialHints = Mesh.lookAtMode != 0 ? VisualMaterial.Hint.Billboard : VisualMaterial.Hint.None;
             //VisualMaterial.Hint materialHints = VisualMaterial.Hint.None;
             uint num_textures = 0;
             if (visualMaterial != null) {
@@ -83,7 +80,7 @@ namespace OpenSpaceImplementation.Visual {
                 Vector3[] new_vertices = new Vector3[num_mapping_entries];
                 Vector3[] new_normals = new Vector3[num_mapping_entries];
                 Vector4[][] new_uvs = new Vector4[num_textures + (vertexColors != null ? 1 : 0)][]; // Thanks to Unity we can only store the blend weights as a third component of the UVs
-                BoneWeight[] new_boneWeights = mesh.bones != null ? new BoneWeight[num_mapping_entries] : null;
+                BoneWeight[] new_boneWeights = Mesh.bones != null ? new BoneWeight[num_mapping_entries] : null;
                 for (int um = 0; um < num_textures; um++) {
                     new_uvs[um] = new Vector4[num_mapping_entries];
                 }
@@ -94,16 +91,16 @@ namespace OpenSpaceImplementation.Visual {
 					}
 				}
                 for (int j = 0; j < num_mapping_entries; j++) {
-                    new_vertices[j] = mesh.vertices[mapping_vertices[j]];
-                    if(mesh.normals != null) new_normals[j] = mesh.normals[mapping_vertices[j]];
-                    if (new_boneWeights != null) new_boneWeights[j] = mesh.bones.weights[mapping_vertices[j]];
+                    new_vertices[j] = Mesh.vertices[mapping_vertices[j]];
+                    if(Mesh.normals != null) new_normals[j] = Mesh.normals[mapping_vertices[j]];
+                    if (new_boneWeights != null) new_boneWeights[j] = Mesh.bones.weights[mapping_vertices[j]];
                     for (int um = 0; um < num_textures; um++) {
                         uint uvMap = (uint)visualMaterial.textures[um].uvFunction % num_uvMaps;
                         //MapLoader.Loader.print(visualMaterial.textures[um].uvFunction + " - " + num_uvMaps);
                         new_uvs[um][j] = uvs[mapping_uvs[uvMap][j]];
-                        if (mesh.blendWeights != null && mesh.blendWeights[visualMaterial.textures[um].blendIndex] != null) {
+                        if (Mesh.blendWeights != null && Mesh.blendWeights[visualMaterial.textures[um].blendIndex] != null) {
                             if (um == 0) materialHints |= VisualMaterial.Hint.Transparent;
-                            new_uvs[um][j].z = mesh.blendWeights[visualMaterial.textures[um].blendIndex][mapping_vertices[j]];
+                            new_uvs[um][j].z = Mesh.blendWeights[visualMaterial.textures[um].blendIndex][mapping_vertices[j]];
                         } else {
                             new_uvs[um][j].z = 1;
                         }
@@ -145,11 +142,11 @@ namespace OpenSpaceImplementation.Visual {
 				if (mesh_main == null) {
 					mesh_main = new Mesh();
 					mesh_main.vertices = new_vertices;
-					if (mesh.normals != null) mesh_main.normals = new_normals;
+					if (Mesh.normals != null) mesh_main.normals = new_normals;
 					mesh_main.triangles = triangles;
 					if (new_boneWeights != null) {
 						mesh_main.boneWeights = new_boneWeights;
-						mesh_main.bindposes = mesh.bones.bindPoses;
+						mesh_main.bindposes = Mesh.bones.bindPoses;
 					}
 					for (int i = 0; i < new_uvs.Length; i++) {
 						mesh_main.SetUVs(i, new_uvs[i].ToList());
@@ -160,8 +157,8 @@ namespace OpenSpaceImplementation.Visual {
 				if (new_boneWeights != null) {
                     mr_main = gao.AddComponent<SkinnedMeshRenderer>();
                     s_mr_main = (SkinnedMeshRenderer)mr_main;
-                    s_mr_main.bones = mesh.bones.bones;
-                    s_mr_main.rootBone = mesh.bones.bones[0];
+                    s_mr_main.bones = Mesh.bones.bones;
+                    s_mr_main.rootBone = Mesh.bones.bones[0];
                     s_mr_main.sharedMesh = CopyMesh(mesh_main);
 					
 					BoxCollider bc = gao.AddComponent<BoxCollider>();
@@ -180,7 +177,7 @@ namespace OpenSpaceImplementation.Visual {
                 Vector3[] new_vertices_spe = new Vector3[num_disconnected_triangles_spe * 3];
                 Vector3[] new_normals_spe = new Vector3[num_disconnected_triangles_spe * 3];
                 Vector3[][] new_uvs_spe = new Vector3[num_textures][];
-                BoneWeight[] new_boneWeights_spe = mesh.bones != null ? new BoneWeight[num_disconnected_triangles_spe * 3] : null;
+                BoneWeight[] new_boneWeights_spe = Mesh.bones != null ? new BoneWeight[num_disconnected_triangles_spe * 3] : null;
                 for (int um = 0; um < num_textures; um++) {
                     new_uvs_spe[um] = new Vector3[num_disconnected_triangles_spe * 3];
                 }
@@ -207,28 +204,28 @@ namespace OpenSpaceImplementation.Visual {
                     int i1 = disconnected_triangles_spe[(j * 3) + 1], m1 = (j * 3) + 1;
                     int i2 = disconnected_triangles_spe[(j * 3) + 2], m2 = (j * 3) + 2;
 
-                    new_vertices_spe[m0] = mesh.vertices[i0];
-                    new_vertices_spe[m1] = mesh.vertices[i1];
-                    new_vertices_spe[m2] = mesh.vertices[i2];
+                    new_vertices_spe[m0] = Mesh.vertices[i0];
+                    new_vertices_spe[m1] = Mesh.vertices[i1];
+                    new_vertices_spe[m2] = Mesh.vertices[i2];
 
-					if (mesh.normals != null) {
-						new_normals_spe[m0] = mesh.normals[i0];
-						new_normals_spe[m1] = mesh.normals[i1];
-						new_normals_spe[m2] = mesh.normals[i2];
+					if (Mesh.normals != null) {
+						new_normals_spe[m0] = Mesh.normals[i0];
+						new_normals_spe[m1] = Mesh.normals[i1];
+						new_normals_spe[m2] = Mesh.normals[i2];
 					}
 
                     if (new_boneWeights_spe != null) {
-                        new_boneWeights_spe[m0] = mesh.bones.weights[i0];
-                        new_boneWeights_spe[m1] = mesh.bones.weights[i1];
-                        new_boneWeights_spe[m2] = mesh.bones.weights[i2];
+                        new_boneWeights_spe[m0] = Mesh.bones.weights[i0];
+                        new_boneWeights_spe[m1] = Mesh.bones.weights[i1];
+                        new_boneWeights_spe[m2] = Mesh.bones.weights[i2];
                     }
-                    if (mesh.blendWeights != null) {
+                    if (Mesh.blendWeights != null) {
                         for (int um = 0; um < num_textures; um++) {
-                            if (mesh.blendWeights[visualMaterial.textures[um].blendIndex] != null) {
+                            if (Mesh.blendWeights[visualMaterial.textures[um].blendIndex] != null) {
                                 if (um == 0) materialHints |= VisualMaterial.Hint.Transparent;
-                                new_uvs_spe[um][m0].z = mesh.blendWeights[visualMaterial.textures[um].blendIndex][i0];
-                                new_uvs_spe[um][m1].z = mesh.blendWeights[visualMaterial.textures[um].blendIndex][i1];
-                                new_uvs_spe[um][m2].z = mesh.blendWeights[visualMaterial.textures[um].blendIndex][i2];
+                                new_uvs_spe[um][m0].z = Mesh.blendWeights[visualMaterial.textures[um].blendIndex][i0];
+                                new_uvs_spe[um][m1].z = Mesh.blendWeights[visualMaterial.textures[um].blendIndex][i1];
+                                new_uvs_spe[um][m2].z = Mesh.blendWeights[visualMaterial.textures[um].blendIndex][i2];
                             }
                         }
                     }
@@ -255,7 +252,7 @@ namespace OpenSpaceImplementation.Visual {
 					mesh_spe.triangles = triangles_spe;
 					if (new_boneWeights_spe != null) {
 						mesh_spe.boneWeights = new_boneWeights_spe;
-						mesh_spe.bindposes = mesh.bones.bindPoses;
+						mesh_spe.bindposes = Mesh.bones.bindPoses;
 					}
 					for (int i = 0; i < num_textures; i++) {
 						mesh_spe.SetUVs(i, new_uvs_spe[i].ToList());
@@ -268,8 +265,8 @@ namespace OpenSpaceImplementation.Visual {
 				if (new_boneWeights_spe != null) {
                     mr_spe = gao_spe.AddComponent<SkinnedMeshRenderer>();
                     s_mr_spe = (SkinnedMeshRenderer)mr_spe;
-                    s_mr_spe.bones = mesh.bones.bones;
-                    s_mr_spe.rootBone = mesh.bones.bones[0];
+                    s_mr_spe.bones = Mesh.bones.bones;
+                    s_mr_spe.rootBone = Mesh.bones.bones[0];
                     s_mr_spe.sharedMesh = CopyMesh(mesh_spe);
 					
 					BoxCollider bc = gao_spe.AddComponent<BoxCollider>();
@@ -339,8 +336,8 @@ namespace OpenSpaceImplementation.Visual {
 			if (mesh_main != null) {
 				Vector3[] new_vertices = mesh_main.vertices;
 				for (int j = 0; j < num_mapping_entries; j++) {
-					Vector3 from = mesh.vertices[mapping_vertices[j]];
-					Vector3 to = el.mesh.vertices[el.mapping_vertices[j]];
+					Vector3 from = Mesh.vertices[mapping_vertices[j]];
+					Vector3 to = el.Mesh.vertices[el.mapping_vertices[j]];
 					new_vertices[j] = Vector3.LerpUnclamped(from, to, lerp);
 				}
 				mesh_main.vertices = new_vertices;
@@ -351,9 +348,9 @@ namespace OpenSpaceImplementation.Visual {
 					int i0 = disconnected_triangles_spe[(j * 3) + 0], o0 = el.disconnected_triangles_spe[(j * 3) + 0], m0 = (j * 3) + 0; // Old index, mapped index
 					int i1 = disconnected_triangles_spe[(j * 3) + 1], o1 = el.disconnected_triangles_spe[(j * 3) + 1], m1 = (j * 3) + 1;
 					int i2 = disconnected_triangles_spe[(j * 3) + 2], o2 = el.disconnected_triangles_spe[(j * 3) + 2], m2 = (j * 3) + 2;
-					new_vertices_spe[m0] = Vector3.LerpUnclamped(mesh.vertices[i0], el.mesh.vertices[o0], lerp);
-					new_vertices_spe[m1] = Vector3.LerpUnclamped(mesh.vertices[i1], el.mesh.vertices[o1], lerp);
-					new_vertices_spe[m2] = Vector3.LerpUnclamped(mesh.vertices[i2], el.mesh.vertices[o2], lerp);
+					new_vertices_spe[m0] = Vector3.LerpUnclamped(Mesh.vertices[i0], el.Mesh.vertices[o0], lerp);
+					new_vertices_spe[m1] = Vector3.LerpUnclamped(Mesh.vertices[i1], el.Mesh.vertices[o1], lerp);
+					new_vertices_spe[m2] = Vector3.LerpUnclamped(Mesh.vertices[i2], el.Mesh.vertices[o2], lerp);
 				}
 				mesh_spe.vertices = new_vertices_spe;
 			}
@@ -381,18 +378,18 @@ namespace OpenSpaceImplementation.Visual {
 			}
 		}
 		public void ResetVertices() {
-			UpdateMeshVertices(mesh.vertices);
+			UpdateMeshVertices(Mesh.vertices);
 		}
 
         public void ReinitBindPoses() {
             if (s_mr_main != null) {
                 Mesh newmesh = CopyMesh(mesh_main);
-                newmesh.bindposes = mesh.bones.bindPoses;
+                newmesh.bindposes = Mesh.bones.bindPoses;
                 s_mr_main.sharedMesh = newmesh;
             }
             if (s_mr_spe != null) {
                 Mesh newmesh = CopyMesh(mesh_spe);
-                newmesh.bindposes = mesh.bones.bindPoses;
+                newmesh.bindposes = Mesh.bones.bindPoses;
                 s_mr_spe.sharedMesh = newmesh;
             }
         }
@@ -404,7 +401,7 @@ namespace OpenSpaceImplementation.Visual {
             s_mr_spe = null;
 			mr_main = null;
 			mr_spe = null;
-			if (mesh.bones != null) {
+			if (Mesh.bones != null) {
 				mesh_main = null;
 				mesh_spe = null;
 			}
@@ -412,7 +409,7 @@ namespace OpenSpaceImplementation.Visual {
 
         public IGeometricElement Clone(MeshObject mesh) {
             MeshElement sm = (MeshElement)MemberwiseClone();
-            sm.mesh = mesh;
+            sm.Mesh = mesh;
             sm.Reset();
             return sm;
         }

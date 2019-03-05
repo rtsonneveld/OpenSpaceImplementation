@@ -56,6 +56,7 @@ namespace OpenSpaceImplementation.LevelLoading {
                 JsonSerializerSettings settings = new JsonSerializerSettings();
                 settings.TypeNameHandling = TypeNameHandling.Objects;
                 settings.NullValueHandling = NullValueHandling.Include;
+                settings.Converters.Add(new IgnoreUnityGameObjectsConverter());
                 settings.Converters.Add(new GameMaterial.GameMaterialReferenceJsonConverter());
                 settings.Converters.Add(new VisualMaterial.VisualMaterialReferenceJsonConverter());
                 settings.SerializationBinder = Binder;
@@ -81,11 +82,20 @@ namespace OpenSpaceImplementation.LevelLoading {
         {
             Debug.Log("Load level "+LevelName);
 
+            // Clear all resources before importing a level
+            Controller.ControllerInstance.ClearAllResources();
+
             string levelPath = Path.Combine(Application.dataPath, Controller.ControllerInstance.ResourceFolder,LevelFolder,LevelName+".json");
             string levelJSON = File.ReadAllText(levelPath);
             SerializedScene level = JsonConvert.DeserializeObject<SerializedScene>(levelJSON, JsonImportSettings);
 
-            level = level;
+            Controller.ControllerInstance.DestroyWorldRoot();
+            GameObject root = Controller.ControllerInstance.CreateWorldRoot(LevelName);
+
+            GameObject sectorsRoot = new GameObject("Sectors");
+            sectorsRoot.transform.parent = root.transform;
+            
+            Controller.SectorManager.LoadSectors(sectorsRoot, level.WorldData.Sectors);
         }
     }
 }

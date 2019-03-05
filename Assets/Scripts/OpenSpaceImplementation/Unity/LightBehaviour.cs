@@ -70,7 +70,7 @@ namespace OpenSpaceImplementation.Unity {
                     pos = transform.position;
                     rot = transform.rotation;
                     scl = transform.localScale;
-                    if (Settings.s.engineVersion == Settings.EngineVersion.R3) {
+                    if (Controller.Settings.engineVersion == Settings.EngineVersion.R3) {
                         li.transMatrix.type = 7;
                         li.transMatrix.SetTRS(transform.position, transform.rotation, transform.localScale, convertAxes: true, setVec: true);
                     } else {

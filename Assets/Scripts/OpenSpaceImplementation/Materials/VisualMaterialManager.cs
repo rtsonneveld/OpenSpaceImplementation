@@ -16,7 +16,7 @@ namespace OpenSpaceImplementation.Materials {
         public Material baseLightMaterial;
         public Material baseTransparentMaterial;
 
-        public string VisualMaterialFolder = "Common\\Materials";
+        public string VisualMaterialFolder = "Materials";
 
         public override VisualMaterial LoadResource(string hash)
         {

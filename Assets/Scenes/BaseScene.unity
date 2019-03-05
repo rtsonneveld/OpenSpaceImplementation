@@ -276,5 +276,25 @@ PrefabInstance:
       propertyPath: ResourceFolder
       value: Rayman2Export
       objectReference: {fileID: 0}
+    - target: {fileID: 4066809218790097779, guid: 7a0ff3fb95e409d46a0016ca1d064fac,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1411011876524898057, guid: 7a0ff3fb95e409d46a0016ca1d064fac,
+        type: 3}
+      propertyPath: baseMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: fa523fcf02484d546820802780cfe89c, type: 2}
+    - target: {fileID: 1411011876524898057, guid: 7a0ff3fb95e409d46a0016ca1d064fac,
+        type: 3}
+      propertyPath: baseTransparentMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 08309a5e6aafe874892127b702c8a6ce, type: 2}
+    - target: {fileID: 1411011876524898057, guid: 7a0ff3fb95e409d46a0016ca1d064fac,
+        type: 3}
+      propertyPath: baseLightMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: e0c7f4cfc9ef72d4a86015376220bcc6, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a0ff3fb95e409d46a0016ca1d064fac, type: 3}

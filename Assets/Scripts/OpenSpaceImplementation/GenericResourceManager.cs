@@ -41,5 +41,12 @@ namespace OpenSpaceImplementation {
         {
             return default; // null
         }
+
+
+        public void ClearResources()
+        {
+            Debug.Log("Clearing all "+resources.Count+" Resources of type " + typeof(T));
+            resources.Clear();
+        }
     }
 }

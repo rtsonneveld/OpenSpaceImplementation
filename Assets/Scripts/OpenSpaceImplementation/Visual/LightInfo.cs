@@ -75,7 +75,7 @@ namespace OpenSpaceImplementation.Visual {
         public LightBehaviour Light {
             get {
                 if (light == null) {
-                    GameObject gao = new GameObject((name == null ? "Light" : name) + 
+                    GameObject gao = new GameObject((name == null ? "Light" : "Light "+name) + 
                         "Type: " + type + " - Far: " + far + " - Near: " + near +
                         //" - FogBlendNear: " + bigAlpha_fogBlendNear + " - FogBlendFar: " + intensityMin_fogBlendFar +
                         " - AlphaLightFlag: " + alphaLightFlag +
@@ -107,7 +107,7 @@ namespace OpenSpaceImplementation.Visual {
         }
 
         public bool IsObjectLighted(ObjectLightedFlag flags) {
-            if (Controller.ControllerInstance.settings.engineVersion == Settings.EngineVersion.Montreal) return true;
+            if (Controller.Settings.engineVersion == Settings.EngineVersion.Montreal) return true;
             if (flags == ObjectLightedFlag.Environment) return true;
             return ((objectLightedFlag & (int)flags) == (int)flags);
         }

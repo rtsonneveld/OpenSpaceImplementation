@@ -7,7 +7,8 @@ using UnityEngine;
 
 namespace OpenSpaceImplementation.Visual.Deform {
     public class DeformSet : IGeometricElement {
-        public MeshObject mesh;
+        
+        public MeshObject Mesh { get; set; }
 
         public ushort num_weights;
         public byte num_bones;
@@ -30,13 +31,9 @@ namespace OpenSpaceImplementation.Visual.Deform {
             }
         }
 
-        public DeformSet(MeshObject mesh) {
-            this.mesh = mesh;
-        }
-
         public void InitUnityBones() {
-            weights = new BoneWeight[mesh.num_vertices];
-            for (int i = 0; i < mesh.num_vertices; i++) {
+            weights = new BoneWeight[Mesh.num_vertices];
+            for (int i = 0; i < Mesh.num_vertices; i++) {
                 weights[i] = new BoneWeight();
                 weights[i].boneIndex0 = 0;
                 weights[i].boneIndex1 = 0;
@@ -69,7 +66,7 @@ namespace OpenSpaceImplementation.Visual.Deform {
             for (int i = 0; i < num_bones; i++) {
                 bindPoses[i] = bones[i].worldToLocalMatrix * Gao.transform.localToWorldMatrix;
             }
-            mesh.ReinitBindposes();
+            Mesh.ReinitBindposes();
         }
         
 
@@ -81,7 +78,7 @@ namespace OpenSpaceImplementation.Visual.Deform {
         public IGeometricElement Clone(MeshObject mesh) {
             DeformSet d = (DeformSet)MemberwiseClone();
             d.Reset();
-            d.mesh = mesh;
+            d.Mesh = mesh;
             d.r3bones = new DeformBone[r3bones.Length];
             for (int i = 0; i < r3bones.Length; i++) {
                 d.r3bones[i] = r3bones[i].Clone();

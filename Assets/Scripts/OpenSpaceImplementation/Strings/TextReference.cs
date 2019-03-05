@@ -22,12 +22,12 @@ namespace OpenSpaceImplementation.Strings {
 
         public override string ToString()
         {
-            return Controller.StringsManager.GetString(this.stringIndex);
+            return Controller.TextManager.GetString(this.stringIndex);
         }
 
         public void Overwrite(string v)
         {
-            Controller.StringsManager.SetString(this.stringIndex, v);
+            Controller.TextManager.SetString(this.stringIndex, v);
         }
 
         public static implicit operator string(TextReference t)

@@ -32,7 +32,21 @@ namespace OpenSpaceImplementation.Visual {
             }
         }
 
+        public void SetParentReferenceForSubblocks()
+        {
+            foreach(IGeometricElement e in subblocks) {
+                e.Mesh = this;
+            }
+
+            if (bones != null) {
+                bones.Mesh = this;
+            }
+        }
+
         public void InitGameObject() {
+
+            SetParentReferenceForSubblocks();
+
             gao = new GameObject("MeshObject");
             gao.tag = "Visual";
             gao.layer = LayerMask.NameToLayer("Visual");

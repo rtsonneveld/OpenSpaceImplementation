@@ -1,5 +1,7 @@
-﻿using OpenSpaceImplementation.Sectors;
+﻿using OpenSpaceImplementation.LevelLoading;
+using OpenSpaceImplementation.Sectors;
 using OpenSpaceImplementation.Visual;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +10,44 @@ using UnityEngine;
 public class SectorManager : MonoBehaviour {
     bool loaded = false;
     public bool displayInactiveSectors = true; bool _displayInactiveSectors = true;
-    public List<Sector> sectors;
+    public Dictionary<string, Sector> Sectors = new Dictionary<string, Sector>();
     //private List<SectorComponent> sectorComponents;
     public Camera mainCamera;
     //public List<Sector> activeSectors = new List<Sector>();
     public Sector activeSector = null;
     Vector3 camPosPrevious;
+
+    public void LoadSectors(GameObject sectorRoot, Dictionary<String, SerializedWorldData.ESector> eSectors)
+    {
+        foreach (var sectorEntry in eSectors) {
+
+            GameObject sectorGao = new GameObject("Sector " + sectorEntry.Key);
+            sectorGao.transform.parent = sectorRoot.transform;
+
+            SerializedWorldData.ESector eSector = sectorEntry.Value;
+            Sector sector = sectorGao.AddComponent<Sector>();
+            sector.Visuals = eSector.Geometry.Values.Select((g) => g.Visuals).ToList();
+            sector.Collision = eSector.Geometry.Values.Select((g) => g.Collision).ToList();
+            sector.CreateGameObjects();
+
+            Sectors.Add(sectorEntry.Key, sector); 
+        }
+
+        // Fill neighbour list
+        foreach (var sectorEntry in eSectors) {
+
+            Sector sector = Sectors[sectorEntry.Key];
+            SerializedWorldData.ESector eSector = sectorEntry.Value;
+            foreach(string neighbour in eSector.Neighbours) {
+                sector.Neighbours.Add(Sectors[neighbour]);
+            }
+        }
+    }
+
+    public void Clear()
+    {
+        this.Sectors.Clear();
+    }
 
     // Use this for initialization
     void Start() {
@@ -103,8 +137,8 @@ public class SectorManager : MonoBehaviour {
     }
 
     public void RecalculateSectorLighting() {
-        foreach (Sector s in sectors) {
-            ApplySectorLighting(s, s.Gao, LightInfo.ObjectLightedFlag.Environment);
+        foreach (Sector s in Sectors.Values) {
+            ApplySectorLighting(s, s.gameObject, LightInfo.ObjectLightedFlag.Environment);
             /*foreach (Perso p in s.persos) {
                 if (p.Gao) {
                     PersoBehaviour pb = p.Gao.GetComponent<PersoBehaviour>();

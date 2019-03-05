@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Visual
+  - Collide
   layers:
   - Default
   - TransparentFX
@@ -13,9 +15,9 @@ TagManager:
   - UI
   - 
   - 
-  - PostProcessing
-  - 
-  - 
+  - Visual
+  - Collide
+  - SuperObject
   - 
   - 
   - 
@@ -38,6 +40,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 1187950219
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

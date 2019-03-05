@@ -44,7 +44,7 @@ namespace OpenSpaceImplementation.Visual {
 
         public bool IsTransparent {
             get {
-                if (Controller.ControllerInstance.settings.engineVersion < Settings.EngineVersion.R3) {
+                if (Controller.Settings.engineVersion < Settings.EngineVersion.R3) {
                     return (flags & 0x100) != 0 || (flags & (1 << 1)) != 0 || (flags & flags_isTransparent) != 0;
                 } else {
                     return (flags & flags_isTransparent) != 0;
@@ -54,58 +54,65 @@ namespace OpenSpaceImplementation.Visual {
 
         public bool IsLight {
             get {
-                //if (Settings.s.engineMode == Settings.EngineMode.R2) return false;
+                //if (Controller.Settings.engineMode == Settings.EngineMode.R2) return false;
                 return (flags & (1 << 5)) != 0;
             }
         }
 
         public Texture2D Texture {
-            get { return texture; }
-            set {
-                texture = value;
-                if (texture != null) {
-					if (!IsRepeatU) {
-						texture.wrapModeU = TextureWrapMode.Clamp;
-					}
-					if (!IsRepeatV) {
-						texture.wrapModeV = TextureWrapMode.Clamp;
-					}
-					if (IsMirrorX && Controller.ControllerInstance.settings.game != Settings.Game.R2Revolution) {
-						texture.wrapModeU = TextureWrapMode.Mirror;
-					}
-					if (IsMirrorY && Controller.ControllerInstance.settings.game != Settings.Game.R2Revolution) {
-						if (Settings.s.platform == Settings.Platform.DC) {
-							Texture2D flipped = new Texture2D(texture.width, texture.height);
+            get {
+                if (texture==null) {
+                    SetTexture(Controller.TextureManager.LoadResource(this.name));
+                }
+                return texture;
+            }
+        }
 
-							int w = texture.width;
-							int h = texture.height;
+        private void SetTexture(Texture2D t)
+        {
+            texture = t;
+            if (texture != null) {
+                if (!IsRepeatU) {
+                    texture.wrapModeU = TextureWrapMode.Clamp;
+                }
+                if (!IsRepeatV) {
+                    texture.wrapModeV = TextureWrapMode.Clamp;
+                }
+                if (IsMirrorX && Controller.Settings.game != Settings.Game.R2Revolution) {
+                    texture.wrapModeU = TextureWrapMode.Mirror;
+                }
+                if (IsMirrorY && Controller.Settings.game != Settings.Game.R2Revolution) {
+                    if (Controller.Settings.platform == Settings.Platform.DC) {
+                        Texture2D flipped = new Texture2D(texture.width, texture.height);
+
+                        int w = texture.width;
+                        int h = texture.height;
 
 
-							for (int x = 0; x < w; x++) {
-								for (int y = 0; y < h; y++) {
-									flipped.SetPixel(x, h - y - 1, texture.GetPixel(x, y));
-								}
-							}
-							flipped.Apply();
-							texture = flipped;
+                        for (int x = 0; x < w; x++) {
+                            for (int y = 0; y < h; y++) {
+                                flipped.SetPixel(x, h - y - 1, texture.GetPixel(x, y));
+                            }
+                        }
+                        flipped.Apply();
+                        texture = flipped;
 
-							if (!IsRepeatU) {
-								texture.wrapModeU = TextureWrapMode.Clamp;
-							}
-							if (IsMirrorX) {
-								texture.wrapModeU = TextureWrapMode.Mirror;
-							}
-						}
-						texture.wrapModeV = TextureWrapMode.Mirror;
-					}
-                    if ((flags & 0x902) != 0 && Controller.ControllerInstance.settings.engineVersion < Settings.EngineVersion.R3) {
-                        byte[] alphaMaskBytes = BitConverter.GetBytes(alphaMask);
-                        SetTextureAlpha(alphaMaskBytes[0] / 255f, alphaMaskBytes[1] / 255f, alphaMaskBytes[2] / 255f);
-                        /*MapLoader.Loader.print(name + " - Alpha mask: " + alphaMask + " - " + String.Format("{0:X}", alphaMask));
-                        MapLoader.Loader.print("Flags & 0x10: " + ((flags & 0x10) != 0));
-                        MapLoader.Loader.print("Flags & 0x808: " + ((flags & 0x808) != 0));
-                        MapLoader.Loader.print("Flags & 0x902: " + ((flags & 0x902) != 0));*/
+                        if (!IsRepeatU) {
+                            texture.wrapModeU = TextureWrapMode.Clamp;
+                        }
+                        if (IsMirrorX) {
+                            texture.wrapModeU = TextureWrapMode.Mirror;
+                        }
                     }
+                    texture.wrapModeV = TextureWrapMode.Mirror;
+                }
+                if ((flags & 0x902) != 0 && Controller.Settings.engineVersion < Settings.EngineVersion.R3) {
+                    byte[] alphaMaskBytes = BitConverter.GetBytes(alphaMask);
+                    SetTextureAlpha(alphaMaskBytes[0] / 255f, alphaMaskBytes[1] / 255f, alphaMaskBytes[2] / 255f);
+                    /*MapLoader.Loader.print(name + " - Alpha mask: " + alphaMask + " - " + String.Format("{0:X}", alphaMask));
+                    MapLoader.Loader.print("Flags & 0x10: " + ((flags & 0x10) != 0));
+                    MapLoader.Loader.print("Flags & 0x808: " + ((flags & 0x808) != 0));
+                    MapLoader.Loader.print("Flags & 0x902: " + ((flags & 0x902) != 0));*/
                 }
             }
         }
@@ -146,13 +153,13 @@ namespace OpenSpaceImplementation.Visual {
         }
         public bool IsRepeatU {
             get {
-                if (Controller.ControllerInstance.settings.engineVersion >= Settings.EngineVersion.R3) return true;
+                if (Controller.Settings.engineVersion >= Settings.EngineVersion.R3) return true;
                 return (flagsByte & 2) != 0;
             }
         }
         public bool IsRepeatV {
             get {
-                if (Controller.ControllerInstance.settings.engineVersion >= Settings.EngineVersion.R3) return true;
+                if (Controller.Settings.engineVersion >= Settings.EngineVersion.R3) return true;
                 return (flagsByte & 1) != 0;
             }
         }

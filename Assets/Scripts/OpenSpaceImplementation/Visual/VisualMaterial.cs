@@ -121,9 +121,9 @@ namespace OpenSpaceImplementation.Visual {
         public bool IsTransparent {
             get {
                 bool transparent = false;
-                if (Controller.ControllerInstance.settings.engineVersion == Settings.EngineVersion.R3 &&
+                if (Controller.Settings.engineVersion == Settings.EngineVersion.R3 &&
                     ((flags & flags_isTransparent) != 0 || (receivedHints & Hint.Transparent) == Hint.Transparent)) transparent = true;
-                if (Controller.ControllerInstance.settings.engineVersion < Settings.EngineVersion.R3) {
+                if (Controller.Settings.engineVersion < Settings.EngineVersion.R3) {
                     if ((flags & 0x4000000) != 0) transparent = true;
                 }
                 if (transparent) {
@@ -139,7 +139,7 @@ namespace OpenSpaceImplementation.Visual {
             get {
                 //if (R3Loader.Loader.mode == R3Loader.Mode.Rayman2PC) R3Loader.Loader.print("Flags: " + flags + "Transparent flag: " + flags_isTransparent);
                 if ((flags & flags_isTransparent) != 0 || (receivedHints & Hint.Transparent) == Hint.Transparent
-                    || Controller.ControllerInstance.settings.engineVersion < Settings.EngineVersion.R3) {
+                    || Controller.Settings.engineVersion < Settings.EngineVersion.R3) {
                     if (textures.Count > 0 && textures[0] != null && textures[0].texture != null) {
                         return textures[0].texture.IsLight;
                     }
@@ -150,7 +150,7 @@ namespace OpenSpaceImplementation.Visual {
 
         public bool IsPixelShaded {
             get {
-                if (Controller.ControllerInstance.settings.engineVersion < Settings.EngineVersion.R3) {
+                if (Controller.Settings.engineVersion < Settings.EngineVersion.R3) {
                     return false;
                 } else {
                     if (textures.Count > 0) {

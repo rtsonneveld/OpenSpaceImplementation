@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 namespace OpenSpaceImplementation.Strings {
-    public abstract class TextManager {
+    public abstract class TextManager : MonoBehaviour {
 
         private string[,] textTable = null;
         private int languageCount = 0;

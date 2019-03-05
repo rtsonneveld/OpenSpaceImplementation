@@ -47,7 +47,7 @@ namespace OpenSpaceImplementation.Visual {
 
         public Texture2D Texture {
             get {
-                if (Controller.ControllerInstance.settings.engineVersion < Settings.EngineVersion.R3) {
+                if (Controller.Settings.engineVersion < Settings.EngineVersion.R3) {
                     if (texture == null) return null;
                     return texture.Texture;
                 }
@@ -74,7 +74,7 @@ namespace OpenSpaceImplementation.Visual {
 
         public bool ScrollingEnabled {
             get {
-                if (Controller.ControllerInstance.settings.engineVersion < Settings.EngineVersion.R3) {
+                if (Controller.Settings.engineVersion < Settings.EngineVersion.R3) {
                     return scrollMode != 0;
                 } else {
                     return ((scrollByte & 6) != 0);
@@ -84,7 +84,7 @@ namespace OpenSpaceImplementation.Visual {
 
         public bool IsScrollX {
             get {
-                if (Controller.ControllerInstance.settings.engineVersion < Settings.EngineVersion.R3) {
+                if (Controller.Settings.engineVersion < Settings.EngineVersion.R3) {
                     return scrollMode != 0 && scrollX != 0;
                 } else {
                     return ((scrollByte & 2) != 0) && scrollX != 0;
@@ -93,7 +93,7 @@ namespace OpenSpaceImplementation.Visual {
         }
         public bool IsScrollY {
             get {
-                if (Controller.ControllerInstance.settings.engineVersion < Settings.EngineVersion.R3) {
+                if (Controller.Settings.engineVersion < Settings.EngineVersion.R3) {
                     return scrollMode != 0 && scrollY != 0;
                 } else {
                     return ((scrollByte & 4) != 0) && scrollY != 0;
@@ -102,7 +102,7 @@ namespace OpenSpaceImplementation.Visual {
         }
         public bool IsRotate {
             get {
-                if (Controller.ControllerInstance.settings.engineVersion < Settings.EngineVersion.R3) {
+                if (Controller.Settings.engineVersion < Settings.EngineVersion.R3) {
                     return false;
                 } else {
                     return ((scrollByte & 8) != 0) || ((scrollByte & 16) != 0);
@@ -126,19 +126,19 @@ namespace OpenSpaceImplementation.Visual {
         public float ScrollX {
             get {
                 if (!IsScrollX) return 0f;
-                return scrollX * Mathf.Abs(Settings.s.textureAnimationSpeedModifier);
+                return scrollX * Mathf.Abs(Controller.Settings.textureAnimationSpeedModifier);
             }
         }
         public float ScrollY {
             get {
                 if (!IsScrollY) return 0f;
-                return scrollY * Settings.s.textureAnimationSpeedModifier;
+                return scrollY * Controller.Settings.textureAnimationSpeedModifier;
             }
         }
 
         public bool IsPixelShaded {
             get {
-                if (Controller.ControllerInstance.settings.engineVersion < Settings.EngineVersion.R3) {
+                if (Controller.Settings.engineVersion < Settings.EngineVersion.R3) {
                     return false;
                 } else {
                     return shadingMode != 2;
@@ -148,32 +148,32 @@ namespace OpenSpaceImplementation.Visual {
 
         public bool IsMirrorX {
             get {
-                if (Controller.ControllerInstance.settings.engineVersion < Settings.EngineVersion.R3 && texture != null) return texture.IsMirrorX;
+                if (Controller.Settings.engineVersion < Settings.EngineVersion.R3 && texture != null) return texture.IsMirrorX;
                 return (properties & 4) != 0;
             }
         }
 
         public bool IsMirrorY {
             get {
-                if (Controller.ControllerInstance.settings.engineVersion < Settings.EngineVersion.R3 && texture != null) return texture.IsMirrorY;
+                if (Controller.Settings.engineVersion < Settings.EngineVersion.R3 && texture != null) return texture.IsMirrorY;
                 return (properties & 8) != 0;
             }
         }
         public bool IsRepeatU {
             get {
-                if (Controller.ControllerInstance.settings.engineVersion < Settings.EngineVersion.R3 && texture != null) return texture.IsRepeatU;
+                if (Controller.Settings.engineVersion < Settings.EngineVersion.R3 && texture != null) return texture.IsRepeatU;
                 return (properties & 1) != 0;
             }
         }
         public bool IsRepeatV {
             get {
-                if (Controller.ControllerInstance.settings.engineVersion < Settings.EngineVersion.R3 && texture != null) return texture.IsRepeatV;
+                if (Controller.Settings.engineVersion < Settings.EngineVersion.R3 && texture != null) return texture.IsRepeatV;
                 return (properties & 2) != 0;
             }
         }
         public uint Format {
             get {
-                if (Controller.ControllerInstance.settings.engineVersion == Settings.EngineVersion.R3 && texture != null) {
+                if (Controller.Settings.engineVersion == Settings.EngineVersion.R3 && texture != null) {
                     return texture.field0;
                 } else return 0;
             }

@@ -55,7 +55,7 @@ namespace OpenSpaceImplementation {
             get { return endian == Endian.Little; }
         }
 
-        public static void Init(Mode mode) {
+        /*public static void Init(Mode mode) {
             switch (mode) {
                 case Mode.Rayman2IOS: s = Settings.R2IOS; break;
                 case Mode.Rayman2DC: s = Settings.R2DC; break;
@@ -77,10 +77,10 @@ namespace OpenSpaceImplementation {
                 case Mode.PlaymobilLauraPC: s = Settings.PlaymobilLauraPC; break;
             }
             if (s != null) s.mode = mode;
-        }
+        }*/
 
 
-        public static Settings s = null;
+        //public static Settings s = null;
         public static Settings R3PC = new Settings() {
             engineVersion = EngineVersion.R3,
             game = Game.R3,
