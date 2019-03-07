@@ -10,9 +10,11 @@ using UnityEngine;
 
 namespace OpenSpaceImplementation.Visual {
     public class LightInfo : IEquatable<LightInfo> {
-        
+
         [JsonIgnore]
         public List<Sector> containingSectors;
+
+        public string offsetString;
 
         public byte turnedOn;
         public byte castShadows;
@@ -50,6 +52,12 @@ namespace OpenSpaceImplementation.Visual {
         public float intensityMax;
         public Vector4 background_color;
         public uint createsShadowsOrNot;
+
+        public void OffsetAll(Vector3 offset)
+        {
+            transMatrix.SetTRS(transMatrix.GetPosition() + offset, transMatrix.GetRotation(), transMatrix.GetScale());
+        }
+
         public string name = null;
 
         [Flags]
@@ -59,54 +67,64 @@ namespace OpenSpaceImplementation.Visual {
             Perso = 2
         }
 
-		public enum LightType {
-			Unknown = 0,
-			Parallel = 1,
-			Spherical = 2,
-			Hotspot = 3, // R2: Cone
-			Ambient = 4,
-			ParallelOtherType = 5, // also seems to be the one with exterMinPos & exterMaxPos, so not spherical
-			Fog = 6, // Also background color
-			ParallelInASphere = 7,
-			SphereOtherType = 8 // ignores persos?
-		}
+        public enum LightType {
+            Unknown = 0,
+            Parallel = 1,
+            Spherical = 2,
+            Hotspot = 3, // R2: Cone
+            Ambient = 4,
+            ParallelOtherType = 5, // also seems to be the one with exterMinPos & exterMaxPos, so not spherical
+            Fog = 6, // Also background color
+            ParallelInASphere = 7,
+            SphereOtherType = 8 // ignores persos?
+        }
 
         private LightBehaviour light;
-        public LightBehaviour Light {
-            get {
-                if (light == null) {
-                    GameObject gao = new GameObject((name == null ? "Light" : "Light "+name) + 
-                        "Type: " + type + " - Far: " + far + " - Near: " + near +
-                        //" - FogBlendNear: " + bigAlpha_fogBlendNear + " - FogBlendFar: " + intensityMin_fogBlendFar +
-                        " - AlphaLightFlag: " + alphaLightFlag +
-                        " - PaintingLightFlag: " + paintingLightFlag +
-                        " - ObjectLightedFlag: " + objectLightedFlag);
-                    Vector3 pos = transMatrix.GetPosition(convertAxes: true);
-                    Quaternion rot = transMatrix.GetRotation(convertAxes: true) * Quaternion.Euler(-90, 0,0);
-                    Vector3 scale = transMatrix.GetScale(convertAxes: true);
-                    gao.transform.localPosition = pos;
-                    gao.transform.localRotation = rot;
-                    gao.transform.localScale = scale;
-                    light = gao.AddComponent<LightBehaviour>();
-                    light.li = this;
-                }
+        public LightBehaviour Light
+        {
+            get
+            {
                 return light;
             }
         }
 
-        public LightInfo() {
+        public LightInfo()
+        {
             containingSectors = new List<Sector>();
         }
 
-        public override bool Equals(System.Object obj) {
+        public void CreateGameObject()
+        {
+            if (light == null) {
+                GameObject gao = new GameObject((name == null ? "Light" : "Light " + name) +
+                    "Type: " + type + " - Far: " + far + " - Near: " + near +
+                    //" - FogBlendNear: " + bigAlpha_fogBlendNear + " - FogBlendFar: " + intensityMin_fogBlendFar +
+                    " - AlphaLightFlag: " + alphaLightFlag +
+                    " - PaintingLightFlag: " + paintingLightFlag +
+                    " - ObjectLightedFlag: " + objectLightedFlag);
+                Vector3 pos = transMatrix.GetPosition(convertAxes: true);
+                Quaternion rot = transMatrix.GetRotation(convertAxes: true) * Quaternion.Euler(-90, 0, 0);
+                Vector3 scale = transMatrix.GetScale(convertAxes: true);
+                gao.transform.localPosition = pos;
+                gao.transform.localRotation = rot;
+                gao.transform.localScale = scale;
+                light = gao.AddComponent<LightBehaviour>();
+                light.li = this;
+            }
+        }
+
+        public override bool Equals(System.Object obj)
+        {
             return obj is LightInfo && this == (LightInfo)obj;
         }
 
-        public bool Equals(LightInfo other) {
+        public bool Equals(LightInfo other)
+        {
             return this == (LightInfo)other;
         }
 
-        public bool IsObjectLighted(ObjectLightedFlag flags) {
+        public bool IsObjectLighted(ObjectLightedFlag flags)
+        {
             if (Controller.Settings.engineVersion == Settings.EngineVersion.Montreal) return true;
             if (flags == ObjectLightedFlag.Environment) return true;
             return ((objectLightedFlag & (int)flags) == (int)flags);

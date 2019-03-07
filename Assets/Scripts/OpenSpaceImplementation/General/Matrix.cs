@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace OpenSpaceImplementation.General {
+namespace OpenSpaceImplementation {
     /// <summary>
     /// Transformation matrix storing position, rotation and scale. Also, an unknown vector4 and type.
     /// </summary>

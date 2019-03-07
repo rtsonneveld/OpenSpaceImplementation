@@ -31,6 +31,19 @@ namespace OpenSpaceImplementation.Visual.Deform {
             }
         }
 
+        public Vector3 AveragePosition
+        {
+            get
+            {
+                return Vector3.zero;
+            }
+        }
+
+        public void OffsetAll(Vector3 offset)
+        {
+            return;
+        }
+
         public void InitUnityBones() {
             weights = new BoneWeight[Mesh.num_vertices];
             for (int i = 0; i < Mesh.num_vertices; i++) {

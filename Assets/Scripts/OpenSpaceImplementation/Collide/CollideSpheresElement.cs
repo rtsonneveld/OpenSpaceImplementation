@@ -16,7 +16,7 @@ namespace OpenSpaceImplementation.Collide {
             public GameMaterial gameMaterial;
         }
 
-        public CollideMeshObject mesh;
+        public CollideMeshObject Mesh { get; set; }
         public ushort num_spheres;
         public IndexedSphere[] spheres;
 		
@@ -32,10 +32,6 @@ namespace OpenSpaceImplementation.Collide {
             }
         }
 
-        public CollideSpheresElement(CollideMeshObject mesh) {
-            this.mesh = mesh;
-        }
-
         private void CreateUnityMesh() {
             for (uint i = 0; i < num_spheres; i++) {
                 GameObject sphere_gao = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -44,7 +40,7 @@ namespace OpenSpaceImplementation.Collide {
                 MeshFilter mf = sphere_gao.GetComponent<MeshFilter>();
                 MeshRenderer mr = sphere_gao.GetComponent<MeshRenderer>();
                 //MonoBehaviour.Destroy(sphere_gao.GetComponent<SphereCollider>());
-                sphere_gao.transform.localPosition = mesh.vertices[spheres[i].centerPoint];
+                sphere_gao.transform.localPosition = Mesh.vertices[spheres[i].centerPoint];
                 sphere_gao.transform.localScale = Vector3.one * spheres[i].radius * 2; // default Unity sphere radius is 0.5
                 sphere_gao.layer = LayerMask.NameToLayer("Collide");
 
@@ -78,7 +74,7 @@ namespace OpenSpaceImplementation.Collide {
 
         public ICollideGeometricElement Clone(CollideMeshObject mesh) {
             CollideSpheresElement sm = (CollideSpheresElement)MemberwiseClone();
-            sm.mesh = mesh;
+            sm.Mesh = mesh;
             sm.Reset();
             return sm;
         }

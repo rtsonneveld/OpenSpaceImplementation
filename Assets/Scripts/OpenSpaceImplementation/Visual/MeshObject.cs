@@ -32,6 +32,28 @@ namespace OpenSpaceImplementation.Visual {
             }
         }
 
+        public Vector3 AveragePosition {
+            get
+            {
+                Vector3 total = new Vector3(0, 0, 0);
+                float c = 0;
+
+                foreach (Vector3 v in vertices) {
+                    total += v;
+                    c++;
+                }
+
+                return c == 0 ? Vector3.zero : total / c;
+            }
+        }
+
+        public void OffsetAll(Vector3 offset)
+        {
+            for (int i = 0; i < vertices.Length; i++) {
+                vertices[i] = vertices[i] + offset;
+            }
+        }
+
         public void SetParentReferenceForSubblocks()
         {
             foreach(IGeometricElement e in subblocks) {

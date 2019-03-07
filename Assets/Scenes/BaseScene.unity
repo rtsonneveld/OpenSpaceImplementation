@@ -188,7 +188,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 704498328}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.6324333, y: 0.9985077, z: -1.62}
+  m_LocalPosition: {x: -99.8, y: 0.9985077, z: 191.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -205,6 +205,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Controller
+      objectReference: {fileID: 0}
+    - target: {fileID: 808249963657920271, guid: 7a0ff3fb95e409d46a0016ca1d064fac,
+        type: 3}
+      propertyPath: enableLighting
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 808249963657920271, guid: 7a0ff3fb95e409d46a0016ca1d064fac,
+        type: 3}
+      propertyPath: LightParentGao
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4066809220462831691, guid: 7a0ff3fb95e409d46a0016ca1d064fac,
         type: 3}

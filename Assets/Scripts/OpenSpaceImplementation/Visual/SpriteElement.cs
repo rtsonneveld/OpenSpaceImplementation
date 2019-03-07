@@ -29,6 +29,19 @@ namespace OpenSpaceImplementation.Visual {
         public ushort num_sprites;
         public IndexedSprite[] sprites;
 
+        public Vector3 AveragePosition
+        {
+            get
+            {
+                return Vector3.zero;
+            }
+        }
+
+        public void OffsetAll(Vector3 offset)
+        {
+            return;
+        }
+
         private GameObject gao = null;
         public GameObject Gao
         {

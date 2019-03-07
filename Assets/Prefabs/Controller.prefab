@@ -225,6 +225,7 @@ Transform:
   - {fileID: 2623395845776283261}
   - {fileID: 2113901320188365766}
   - {fileID: 6208157666318765569}
+  - {fileID: 7470416490917793292}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -240,8 +241,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0bb5e7a5c2aacb4692b5fb472841971, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ResourceFolder: 
   WorldRootGAO: {fileID: 0}
+  ResourceFolder: 
 --- !u!1 &4066809220722378352
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,3 +467,54 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameMaterialFolder: Materials
+--- !u!1 &8270197903867958764
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7470416490917793292}
+  - component: {fileID: 808249963657920271}
+  m_Layer: 0
+  m_Name: LightManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7470416490917793292
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8270197903867958764}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4066809220462831691}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &808249963657920271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8270197903867958764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7da3d5b8e7737664984a1b82675797de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 0}
+  sectorManager: {fileID: 6793785438519164150}
+  backgroundPanel: {fileID: 0}
+  luminosity: 0.5
+  saturate: 1
+  useDefaultSettings: 1
+  enableLighting: 1
+  enableFog: 1

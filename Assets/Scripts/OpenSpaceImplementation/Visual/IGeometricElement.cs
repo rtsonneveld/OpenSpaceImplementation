@@ -15,5 +15,7 @@ namespace OpenSpaceImplementation.Visual {
         {
             get; set;
         }
+
+        Vector3 AveragePosition { get; }
     }
 }

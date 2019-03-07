@@ -6,6 +6,7 @@ using OpenSpaceImplementation.Materials;
 using OpenSpaceImplementation.Sound;
 using OpenSpaceImplementation.Strings;
 using System;
+using OpenSpaceImplementation.Unity;
 
 namespace OpenSpaceImplementation {
 
@@ -72,6 +73,8 @@ namespace OpenSpaceImplementation {
         public static SectorManager SectorManager => controllerGAO.transform.Find("SectorManager")?.GetComponent<SectorManager>();
 
         public static TextureManager TextureManager => controllerGAO.transform.Find("TextureManager")?.GetComponent<TextureManager>();
+
+        public static LightManager LightManager => controllerGAO.transform.Find("LightManager")?.GetComponent<LightManager>();
     }
 
 }

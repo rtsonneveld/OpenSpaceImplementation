@@ -6,6 +6,7 @@ using System.Text;
 using UnityEngine;
 
 namespace OpenSpaceImplementation.Unity {
+
     public class ScrollingTexture : MonoBehaviour {
         public VisualMaterial visMat;
         public Material mat;

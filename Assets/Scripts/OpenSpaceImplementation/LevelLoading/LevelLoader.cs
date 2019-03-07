@@ -22,6 +22,9 @@ namespace OpenSpaceImplementation.LevelLoading {
                 typeof(UnityEngine.Vector3),
                 typeof(UnityEngine.Vector3Int),
                 typeof(UnityEngine.Vector4),
+                typeof(UnityEngine.Matrix4x4),
+                typeof(Nullable<UnityEngine.Matrix4x4>),
+                typeof(OpenSpaceImplementation.Matrix),
                 typeof(OpenSpaceImplementation.LevelLoading.SerializedGraphData),
                 typeof(OpenSpaceImplementation.LevelLoading.SerializedGraphData.EArc),
                 typeof(OpenSpaceImplementation.LevelLoading.SerializedGraphData.EGraph),
@@ -32,13 +35,17 @@ namespace OpenSpaceImplementation.LevelLoading {
                 typeof(OpenSpaceImplementation.LevelLoading.SerializedPersoData.EPerso),
                 typeof(OpenSpaceImplementation.LevelLoading.SerializedPersoData.EStandardGame),
                 typeof(OpenSpaceImplementation.LevelLoading.SerializedScene),
+                typeof(OpenSpaceImplementation.LevelLoading.SerializedLightData),
                 typeof(OpenSpaceImplementation.LevelLoading.SerializedWorldData),
                 typeof(OpenSpaceImplementation.LevelLoading.SerializedWorldData.EGeometry),
                 typeof(OpenSpaceImplementation.LevelLoading.SerializedWorldData.ESector),
                 typeof(OpenSpaceImplementation.LevelLoading.GameMaterialReference),
                 typeof(OpenSpaceImplementation.LevelLoading.VisualMaterialReference),
+                typeof(OpenSpaceImplementation.Visual.LightInfo),
                 typeof(OpenSpaceImplementation.Visual.MeshObject),
                 typeof(OpenSpaceImplementation.Visual.MeshElement),
+                typeof(OpenSpaceImplementation.Visual.SpriteElement),
+                typeof(OpenSpaceImplementation.Visual.IndexedSprite),
                 typeof(OpenSpaceImplementation.Visual.VisualMaterial),
                 typeof(OpenSpaceImplementation.Visual.VisualMaterialTexture),
                 typeof(OpenSpaceImplementation.Visual.TextureInfo),
@@ -94,8 +101,13 @@ namespace OpenSpaceImplementation.LevelLoading {
 
             GameObject sectorsRoot = new GameObject("Sectors");
             sectorsRoot.transform.parent = root.transform;
-            
+
+            GameObject lightRoot = new GameObject("Lights");
+            lightRoot.transform.parent = root.transform;
+            Controller.LightManager.LoadLights(lightRoot, level.LightData.Lights);
+
             Controller.SectorManager.LoadSectors(sectorsRoot, level.WorldData.Sectors);
+            Controller.SectorManager.RecalculateSectorLighting();
         }
     }
 }

@@ -17,6 +17,7 @@ namespace OpenSpaceImplementation.LevelLoading {
         public SerializedPersoData PersoData;
         public SerializedGraphData GraphData;
         public SerializedWorldData WorldData;
+        public SerializedLightData LightData;
     }
 
 

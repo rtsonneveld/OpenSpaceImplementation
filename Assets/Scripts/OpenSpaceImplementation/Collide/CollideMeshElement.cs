@@ -10,7 +10,7 @@ using UnityEngine;
 namespace OpenSpaceImplementation.Collide {
     public class CollideMeshElement : ICollideGeometricElement {
 
-        public CollideMeshObject mesh;
+        public CollideMeshObject Mesh { get; set; }
         public ushort num_triangles;
         public ushort num_mapping;
         public ushort num_mapping_entries;
@@ -33,10 +33,6 @@ namespace OpenSpaceImplementation.Collide {
             }
         }
 
-        public CollideMeshElement(CollideMeshObject mesh) {
-            this.mesh = mesh;
-        }
-
         private void CreateUnityMesh() {
             if(num_triangles > 0) {
                 Vector3[] new_vertices = new Vector3[num_triangles * 3];
@@ -44,7 +40,7 @@ namespace OpenSpaceImplementation.Collide {
                 Vector2[] new_uvs = new Vector2[num_triangles * 3];
 
                 for (int j = 0; j < num_triangles * 3; j++) {
-                    new_vertices[j] = mesh.vertices[triangles[j]];
+                    new_vertices[j] = Mesh.vertices[triangles[j]];
                     if(normals != null) new_normals[j] = normals[j/3];
                     if (uvs != null) new_uvs[j] = uvs[mapping[j]];
                 }
@@ -97,7 +93,7 @@ namespace OpenSpaceImplementation.Collide {
 
         public ICollideGeometricElement Clone(CollideMeshObject mesh) {
             CollideMeshElement sm = (CollideMeshElement)MemberwiseClone();
-            sm.mesh = mesh;
+            sm.Mesh = mesh;
             sm.Reset();
             return sm;
         }

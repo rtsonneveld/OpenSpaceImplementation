@@ -18,7 +18,6 @@ namespace OpenSpaceImplementation.Visual {
         public ushort field6;
 
         public uint fieldC;           //
-        [JsonIgnore] // pointer to opengl texture data probaly, not interesting for JSON
         public uint field10;         //
         public uint flags;          // field14
         public ushort height_;     // field18
@@ -83,7 +82,7 @@ namespace OpenSpaceImplementation.Visual {
                 }
                 if (IsMirrorY && Controller.Settings.game != Settings.Game.R2Revolution) {
                     if (Controller.Settings.platform == Settings.Platform.DC) {
-                        Texture2D flipped = new Texture2D(texture.width, texture.height);
+                        /*Texture2D flipped = new Texture2D(texture.width, texture.height);
 
                         int w = texture.width;
                         int h = texture.height;
@@ -102,13 +101,13 @@ namespace OpenSpaceImplementation.Visual {
                         }
                         if (IsMirrorX) {
                             texture.wrapModeU = TextureWrapMode.Mirror;
-                        }
+                        }*/
                     }
                     texture.wrapModeV = TextureWrapMode.Mirror;
                 }
                 if ((flags & 0x902) != 0 && Controller.Settings.engineVersion < Settings.EngineVersion.R3) {
                     byte[] alphaMaskBytes = BitConverter.GetBytes(alphaMask);
-                    SetTextureAlpha(alphaMaskBytes[0] / 255f, alphaMaskBytes[1] / 255f, alphaMaskBytes[2] / 255f);
+                    //SetTextureAlpha(alphaMaskBytes[0] / 255f, alphaMaskBytes[1] / 255f, alphaMaskBytes[2] / 255f);
                     /*MapLoader.Loader.print(name + " - Alpha mask: " + alphaMask + " - " + String.Format("{0:X}", alphaMask));
                     MapLoader.Loader.print("Flags & 0x10: " + ((flags & 0x10) != 0));
                     MapLoader.Loader.print("Flags & 0x808: " + ((flags & 0x808) != 0));

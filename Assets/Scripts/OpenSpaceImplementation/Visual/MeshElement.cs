@@ -45,6 +45,38 @@ namespace OpenSpaceImplementation.Visual {
         private Mesh mesh_main = null;
         private Mesh mesh_spe = null;
 
+        public Vector3 AveragePosition
+        {
+            get
+            {
+
+                if (mesh_main == null) {
+                    return Vector3.zero;
+                }
+
+                Vector3 avg = new Vector3(0, 0, 0);
+                float c = 0;
+
+                foreach (Vector3 v in mesh_main.vertices) {
+                    avg += v;
+                    c++;
+                }
+
+                return c == 0 ? Vector3.zero : avg / c;
+            }
+        }
+
+        public void OffsetAll(Vector3 offset)
+        {
+            if (mesh_main == null) {
+                return;
+            }
+
+            for (int i=0;i<mesh_main.vertices.Length;i++) {
+                Vector3 v = mesh_main.vertices[i];
+                v += offset;
+            }
+        }
 
         private GameObject gao = null;
         public GameObject Gao {

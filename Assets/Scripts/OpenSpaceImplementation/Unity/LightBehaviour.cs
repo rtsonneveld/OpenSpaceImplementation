@@ -5,10 +5,12 @@ using System.Linq;
 using UnityEngine;
 
 namespace OpenSpaceImplementation.Unity {
+
     public class LightBehaviour : MonoBehaviour {
+
+        [SerializeField]
         public LightInfo li;
         public Light l = null;
-        bool loaded = false;
         public Color color;
         public Color backgroundColor;
         float intensity;
@@ -20,12 +22,6 @@ namespace OpenSpaceImplementation.Unity {
         private Vector3 scl;
         private Color col;
         private Color bckCol;
-        private bool modified = false;
-
-        public bool IsModified
-        {
-            get { return modified; }
-        }
 
         // Use this for initialization
         void Start()
@@ -57,15 +53,13 @@ namespace OpenSpaceImplementation.Unity {
             }*/
             col = color;
             bckCol = backgroundColor;
-            loaded = true;
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (loaded && lightManager != null) {
+            if (lightManager != null && false) {
                 if (pos != transform.position || rot != transform.rotation || scl != transform.localScale || col != color || bckCol != backgroundColor) {
-                    modified = true;
                     lightManager.sectorManager.RecalculateSectorLighting();
                     pos = transform.position;
                     rot = transform.rotation;
@@ -109,6 +103,9 @@ namespace OpenSpaceImplementation.Unity {
         public void OnDrawGizmos()
         {
             Gizmos.color = new Color(color.r, color.g, color.b, 1f);
+            if (li == null) {
+                return;
+            }
             switch (li.type) {
                 case 2:
                 case 7:
@@ -127,6 +124,11 @@ namespace OpenSpaceImplementation.Unity {
         {
             Gizmos.color = new Color(color.r, color.g, color.b, 1f);
             Gizmos.matrix = Matrix4x4.identity;
+
+            if (li == null) {
+                return;
+            }
+
             switch (li.type) {
                 case 1:
                     Gizmos.DrawRay(transform.position, transform.rotation.eulerAngles); break;

@@ -16,7 +16,7 @@ namespace OpenSpaceImplementation.LevelLoading {
             public List<String> Neighbours;
             public Dictionary<string, EGeometry> Geometry;
             public BoundingVolume SectorBorder;
-            //public List<LightInfo> LightInfo;
+            public List<String> LightReferences;
             public bool Virtual;
         }
 

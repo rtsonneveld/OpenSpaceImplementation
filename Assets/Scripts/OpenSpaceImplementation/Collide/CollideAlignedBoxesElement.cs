@@ -15,7 +15,6 @@ namespace OpenSpaceImplementation.Collide {
             public GameMaterial gameMaterial;
         }
 
-        public CollideMeshObject mesh;
         public ushort num_boxes;
         public IndexedAlignedBox[] boxes;
 		
@@ -31,9 +30,7 @@ namespace OpenSpaceImplementation.Collide {
             }
         }
 
-        public CollideAlignedBoxesElement(CollideMeshObject mesh) {
-            this.mesh = mesh;
-        }
+        public CollideMeshObject Mesh { get; set; }
 
         private void CreateUnityMesh() {
             for (uint i = 0; i < num_boxes; i++) {
@@ -44,9 +41,9 @@ namespace OpenSpaceImplementation.Collide {
                 MeshFilter mf = box_gao.GetComponent<MeshFilter>();
                 MeshRenderer mr = box_gao.GetComponent<MeshRenderer>();
 				//MonoBehaviour.Destroy(box_gao.GetComponent<BoxCollider>());
-				Vector3 center = Vector3.Lerp(mesh.vertices[boxes[i].minPoint], mesh.vertices[boxes[i].maxPoint], 0.5f);
+				Vector3 center = Vector3.Lerp(Mesh.vertices[boxes[i].minPoint], Mesh.vertices[boxes[i].maxPoint], 0.5f);
                 box_gao.transform.localPosition = center;
-                box_gao.transform.localScale = mesh.vertices[boxes[i].maxPoint] - mesh.vertices[boxes[i].minPoint];
+                box_gao.transform.localScale = Mesh.vertices[boxes[i].maxPoint] - Mesh.vertices[boxes[i].minPoint];
 
                 /* TODO: visualize collision?
 				mr.material = MapLoader.Loader.collideMaterial;
@@ -78,7 +75,7 @@ namespace OpenSpaceImplementation.Collide {
 
         public ICollideGeometricElement Clone(CollideMeshObject mesh) {
             CollideAlignedBoxesElement sm = (CollideAlignedBoxesElement)MemberwiseClone();
-            sm.mesh = mesh;
+            sm.Mesh = mesh;
             sm.Reset();
             return sm;
         }

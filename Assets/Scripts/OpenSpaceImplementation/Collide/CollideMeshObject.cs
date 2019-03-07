@@ -13,7 +13,7 @@ namespace OpenSpaceImplementation.Collide {
         //public PhysicalObject po;
         public CollideType type;
 
-        public GameObject gao = null;
+        public GameObject Gao { get; set; }
 		
         public ushort num_vertices;
         public ushort num_subblocks;
@@ -27,9 +27,58 @@ namespace OpenSpaceImplementation.Collide {
             this.type = type;
         }
 
+        public Vector3 AveragePosition
+        {
+            get
+            {
+                Vector3 total = new Vector3(0, 0, 0);
+                float c = 0;
+
+                foreach (Vector3 v in vertices) {
+                    total += v;
+                    c++;
+                }
+
+                return c == 0 ? Vector3.zero : total / c;
+            }
+        }
+
+        public void OffsetAll(Vector3 offset)
+        {
+            for(int i=0;i<vertices.Length;i++) {
+                vertices[i] = vertices[i] + offset;
+            }
+        }
+
+        public void SetParentReferenceForSubblocks()
+        {
+            foreach (ICollideGeometricElement e in subblocks) {
+                e.Mesh = this;
+            }
+        }
+
+        public void InitGameObject()
+        {
+            SetParentReferenceForSubblocks();
+
+            Gao = new GameObject("Collide Set " + (type != CollideType.None ? type + " " : ""));
+            Gao.tag = "Collide";
+            Gao.layer = LayerMask.NameToLayer("Collide");
+
+            for (uint i = 0; i < num_subblocks; i++) {
+                if (subblocks[i] != null) {
+                    GameObject child = subblocks[i].Gao;
+                    child.transform.SetParent(Gao.transform);
+                    child.transform.localPosition = Vector3.zero;
+                }
+            }
+            SetVisualsActive(false); // Invisible by default
+        }
+
+
         public void SetVisualsActive(bool active) {
-			if (gao == null) return;
-            Renderer[] renderers = gao.GetComponentsInChildren<Renderer>(includeInactive: true);
+			if (Gao == null) return;
+            Renderer[] renderers = Gao.GetComponentsInChildren<Renderer>(includeInactive: true);
             foreach (Renderer ren in renderers) {
                 ren.enabled = active;
             }
@@ -46,8 +95,8 @@ namespace OpenSpaceImplementation.Collide {
 
         public CollideMeshObject Clone() {
             CollideMeshObject m = (CollideMeshObject)MemberwiseClone();
-            m.gao = new GameObject("Collide Set");
-            m.gao.tag = "Collide";
+            m.Gao = new GameObject("Collide Set");
+            m.Gao.tag = "Collide";
             m.subblocks = new ICollideGeometricElement[num_subblocks];
             for (uint i = 0; i < m.num_subblocks; i++) {
                 if (subblocks[i] != null) {
@@ -57,7 +106,7 @@ namespace OpenSpaceImplementation.Collide {
             for (uint i = 0; i < m.num_subblocks; i++) {
                 if (m.subblocks[i] != null) {
                     GameObject child = m.subblocks[i].Gao;
-                    child.transform.SetParent(m.gao.transform);
+                    child.transform.SetParent(m.Gao.transform);
                     child.transform.localPosition = Vector3.zero;
                     /*if (m.subblocks[i] is CollideMeshElement) {
                         GameObject child = ((CollideMeshElement)m.subblocks[i]).Gao;
