@@ -10,6 +10,7 @@ using OpenSpaceImplementation.Unity;
 
 namespace OpenSpaceImplementation {
 
+    [ExecuteAlways]
     public class Controller : MonoBehaviour {
 
         // Instance
@@ -17,6 +18,7 @@ namespace OpenSpaceImplementation {
         public GameObject WorldRootGAO;
         public string ResourceFolder = "";
         public Settings settings = OpenSpaceImplementation.Settings.R2PC;
+        //public static bool JustStarted = false; // Is set to true on startup
 
         public GameObject CreateWorldRoot(string levelName)
         {
@@ -40,6 +42,14 @@ namespace OpenSpaceImplementation {
             GameMaterialManager.ClearResources();
             VisualMaterialManager.ClearResources();
             TextureManager.ClearResources();
+        }
+
+        public void Update()
+        {
+            /*if (JustStarted || true) {
+                LightManager.RecalculateSectorLighting();
+                JustStarted = false;
+            }*/
         }
 
         // Static
@@ -75,6 +85,13 @@ namespace OpenSpaceImplementation {
         public static TextureManager TextureManager => controllerGAO.transform.Find("TextureManager")?.GetComponent<TextureManager>();
 
         public static LightManager LightManager => controllerGAO.transform.Find("LightManager")?.GetComponent<LightManager>();
+
+        public static void SetDirty()
+        {
+            EditorFix.SetObjectDirty(ControllerInstance);
+            EditorFix.SetObjectDirty(SectorManager);
+            EditorFix.SetObjectDirty(LightManager);
+        }
     }
 
 }

@@ -9,12 +9,9 @@ using System.Text;
 using UnityEngine;
 
 namespace OpenSpaceImplementation.Visual {
+
+    [Serializable]
     public class LightInfo : IEquatable<LightInfo> {
-
-        [JsonIgnore]
-        public List<Sector> containingSectors;
-
-        public string offsetString;
 
         public byte turnedOn;
         public byte castShadows;
@@ -79,38 +76,28 @@ namespace OpenSpaceImplementation.Visual {
             SphereOtherType = 8 // ignores persos?
         }
 
-        private LightBehaviour light;
-        public LightBehaviour Light
-        {
-            get
-            {
-                return light;
-            }
-        }
-
         public LightInfo()
         {
-            containingSectors = new List<Sector>();
         }
 
-        public void CreateGameObject()
+        public LightBehaviour CreateGameObject()
         {
-            if (light == null) {
-                GameObject gao = new GameObject((name == null ? "Light" : "Light " + name) +
-                    "Type: " + type + " - Far: " + far + " - Near: " + near +
-                    //" - FogBlendNear: " + bigAlpha_fogBlendNear + " - FogBlendFar: " + intensityMin_fogBlendFar +
-                    " - AlphaLightFlag: " + alphaLightFlag +
-                    " - PaintingLightFlag: " + paintingLightFlag +
-                    " - ObjectLightedFlag: " + objectLightedFlag);
-                Vector3 pos = transMatrix.GetPosition(convertAxes: true);
-                Quaternion rot = transMatrix.GetRotation(convertAxes: true) * Quaternion.Euler(-90, 0, 0);
-                Vector3 scale = transMatrix.GetScale(convertAxes: true);
-                gao.transform.localPosition = pos;
-                gao.transform.localRotation = rot;
-                gao.transform.localScale = scale;
-                light = gao.AddComponent<LightBehaviour>();
-                light.li = this;
-            }
+            GameObject gao = new GameObject((name == null ? "Light" : "Light " + name) +
+                "Type: " + type + " - Far: " + far + " - Near: " + near +
+                //" - FogBlendNear: " + bigAlpha_fogBlendNear + " - FogBlendFar: " + intensityMin_fogBlendFar +
+                " - AlphaLightFlag: " + alphaLightFlag +
+                " - PaintingLightFlag: " + paintingLightFlag +
+                " - ObjectLightedFlag: " + objectLightedFlag);
+            Vector3 pos = transMatrix.GetPosition(convertAxes: true);
+            Quaternion rot = transMatrix.GetRotation(convertAxes: true) * Quaternion.Euler(-90, 0, 0);
+            Vector3 scale = transMatrix.GetScale(convertAxes: true);
+            gao.transform.localPosition = pos;
+            gao.transform.localRotation = rot;
+            gao.transform.localScale = scale;
+            LightBehaviour light = gao.AddComponent<LightBehaviour>();
+            light.lightInfo = this;
+
+            return light;
         }
 
         public override bool Equals(System.Object obj)

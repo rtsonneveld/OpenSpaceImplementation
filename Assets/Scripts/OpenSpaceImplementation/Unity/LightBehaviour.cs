@@ -1,4 +1,5 @@
-﻿using OpenSpaceImplementation.Visual;
+﻿using OpenSpaceImplementation.Sectors;
+using OpenSpaceImplementation.Visual;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,9 @@ namespace OpenSpaceImplementation.Unity {
 
     public class LightBehaviour : MonoBehaviour {
 
-        [SerializeField]
-        public LightInfo li;
-        public Light l = null;
+        public string offsetString;
+        public LightInfo lightInfo = new LightInfo();
+        //public Light l = null;
         public Color color;
         public Color backgroundColor;
         float intensity;
@@ -23,6 +24,8 @@ namespace OpenSpaceImplementation.Unity {
         private Color col;
         private Color bckCol;
 
+        public List<Sector> Sectors = new List<Sector>();
+
         // Use this for initialization
         void Start()
         {
@@ -34,16 +37,16 @@ namespace OpenSpaceImplementation.Unity {
             rot = transform.rotation;
             scl = transform.localScale;
             //color = new Color(Mathf.Clamp01(r3l.color.x), Mathf.Clamp01(r3l.color.y), Mathf.Clamp01(r3l.color.z), Mathf.Clamp01(r3l.color.w));
-            intensity = Mathf.Max(li.color.x, li.color.y, li.color.z);
+            intensity = Mathf.Max(lightInfo.color.x, lightInfo.color.y, lightInfo.color.z);
             if (intensity > 1) {
-                Vector3 colorVector = new Vector3(li.color.x / intensity, li.color.y / intensity, li.color.z / intensity);
-                color = new Color(Mathf.Clamp01(colorVector.x), Mathf.Clamp01(colorVector.y), Mathf.Clamp01(colorVector.z), Mathf.Clamp01(li.color.w));
+                Vector3 colorVector = new Vector3(lightInfo.color.x / intensity, lightInfo.color.y / intensity, lightInfo.color.z / intensity);
+                color = new Color(Mathf.Clamp01(colorVector.x), Mathf.Clamp01(colorVector.y), Mathf.Clamp01(colorVector.z), Mathf.Clamp01(lightInfo.color.w));
             } else if (intensity > 0) {
-                color = new Color(Mathf.Clamp01(li.color.x), Mathf.Clamp01(li.color.y), Mathf.Clamp01(li.color.z), Mathf.Clamp01(li.color.w));
+                color = new Color(Mathf.Clamp01(lightInfo.color.x), Mathf.Clamp01(lightInfo.color.y), Mathf.Clamp01(lightInfo.color.z), Mathf.Clamp01(lightInfo.color.w));
             } else {
                 // shadow, can't display it since colors are additive in Unity
             }
-            backgroundColor = new Color(Mathf.Clamp01(li.background_color.x), Mathf.Clamp01(li.background_color.y), Mathf.Clamp01(li.background_color.z), Mathf.Clamp01(li.background_color.w));
+            backgroundColor = new Color(Mathf.Clamp01(lightInfo.background_color.x), Mathf.Clamp01(lightInfo.background_color.y), Mathf.Clamp01(lightInfo.background_color.z), Mathf.Clamp01(lightInfo.background_color.w));
             /*if (li.alphaLightFlag != 0) {
                 color = new Color(color.r * li.color.w, color.g * li.color.w, color.b * li.color.w);
                 backgroundColor = new Color(
@@ -65,23 +68,23 @@ namespace OpenSpaceImplementation.Unity {
                     rot = transform.rotation;
                     scl = transform.localScale;
                     if (Controller.Settings.engineVersion == Settings.EngineVersion.R3) {
-                        li.transMatrix.type = 7;
-                        li.transMatrix.SetTRS(transform.position, transform.rotation, transform.localScale, convertAxes: true, setVec: true);
+                        lightInfo.transMatrix.type = 7;
+                        lightInfo.transMatrix.SetTRS(transform.position, transform.rotation, transform.localScale, convertAxes: true, setVec: true);
                     } else {
-                        li.transMatrix.SetTRS(transform.position, transform.rotation, transform.localScale, convertAxes: true, setVec: false);
+                        lightInfo.transMatrix.SetTRS(transform.position, transform.rotation, transform.localScale, convertAxes: true, setVec: false);
                     }
-                    intensity = Mathf.Max(li.color.x, li.color.y, li.color.z);
-                    li.color = color;
-                    li.background_color = backgroundColor;
+                    intensity = Mathf.Max(lightInfo.color.x, lightInfo.color.y, lightInfo.color.z);
+                    lightInfo.color = color;
+                    lightInfo.background_color = backgroundColor;
                     if (intensity > 1) {
-                        Vector3 colorVector = new Vector3(li.color.x / intensity, li.color.y / intensity, li.color.z / intensity);
-                        color = new Color(Mathf.Clamp01(colorVector.x), Mathf.Clamp01(colorVector.y), Mathf.Clamp01(colorVector.z), Mathf.Clamp01(li.color.w));
+                        Vector3 colorVector = new Vector3(lightInfo.color.x / intensity, lightInfo.color.y / intensity, lightInfo.color.z / intensity);
+                        color = new Color(Mathf.Clamp01(colorVector.x), Mathf.Clamp01(colorVector.y), Mathf.Clamp01(colorVector.z), Mathf.Clamp01(lightInfo.color.w));
                     } else if (intensity > 0) {
-                        color = new Color(Mathf.Clamp01(li.color.x), Mathf.Clamp01(li.color.y), Mathf.Clamp01(li.color.z), Mathf.Clamp01(li.color.w));
+                        color = new Color(Mathf.Clamp01(lightInfo.color.x), Mathf.Clamp01(lightInfo.color.y), Mathf.Clamp01(lightInfo.color.z), Mathf.Clamp01(lightInfo.color.w));
                     } else {
                         // shadow, can't display it since colors are additive in Unity
                     }
-                    backgroundColor = new Color(Mathf.Clamp01(li.background_color.x), Mathf.Clamp01(li.background_color.y), Mathf.Clamp01(li.background_color.z), Mathf.Clamp01(li.background_color.w));
+                    backgroundColor = new Color(Mathf.Clamp01(lightInfo.background_color.x), Mathf.Clamp01(lightInfo.background_color.y), Mathf.Clamp01(lightInfo.background_color.z), Mathf.Clamp01(lightInfo.background_color.w));
                     bckCol = backgroundColor;
                     col = color;
                 }
@@ -103,10 +106,10 @@ namespace OpenSpaceImplementation.Unity {
         public void OnDrawGizmos()
         {
             Gizmos.color = new Color(color.r, color.g, color.b, 1f);
-            if (li == null) {
+            if (lightInfo == null) {
                 return;
             }
-            switch (li.type) {
+            switch (lightInfo.type) {
                 case 2:
                 case 7:
                 case 8:
@@ -125,17 +128,17 @@ namespace OpenSpaceImplementation.Unity {
             Gizmos.color = new Color(color.r, color.g, color.b, 1f);
             Gizmos.matrix = Matrix4x4.identity;
 
-            if (li == null) {
+            if (lightInfo == null) {
                 return;
             }
 
-            switch (li.type) {
+            switch (lightInfo.type) {
                 case 1:
                     Gizmos.DrawRay(transform.position, transform.rotation.eulerAngles); break;
                 case 2:
                 case 7:
                 case 8:
-                    Gizmos.DrawWireSphere(transform.position, li.far); break;
+                    Gizmos.DrawWireSphere(transform.position, lightInfo.far); break;
             }
         }
     }

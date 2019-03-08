@@ -8,6 +8,8 @@ namespace OpenSpaceImplementation {
     /// <summary>
     /// Transformation matrix storing position, rotation and scale. Also, an unknown vector4 and type.
     /// </summary>
+
+    [Serializable]
     public class Matrix {
         public UInt32 type;
         public Matrix4x4 m;

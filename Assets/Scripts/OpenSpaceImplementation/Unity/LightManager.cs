@@ -9,14 +9,28 @@ using System;
 
 namespace OpenSpaceImplementation.Unity {
 
-    //[ExecuteAlways]
+    [ExecuteAlways]
     public class LightManager : MonoBehaviour {
 
         public SectorManager sectorManager;
+        public GameObject LightParentGao;
+
         //public MeshRenderer backgroundPanel; TODO: background panel
         private VisualMaterial backgroundMaterial;
         private Sector previousActiveBackgroundSector = null;
-        private List<LightInfo> Lights = new List<LightInfo>();
+
+        public List<LightBehaviour> Lights
+        {
+            get
+            {
+                return LightParentGao.GetComponentsInChildren<LightBehaviour>().ToList();
+            }
+        }
+
+        public List<LightBehaviour> GetLightsForSector(Sector sector)
+        {
+            return Lights.Where(l => l.Sectors.Contains(sector)).ToList();
+        }
 
         [Range(0.0f, 1.0f)]
         public float luminosity = 0.5f;
@@ -28,8 +42,6 @@ namespace OpenSpaceImplementation.Unity {
 
         public bool enableLighting = true; private bool _enableLighting = true;
         public bool enableFog = true; private bool _enableFog = true;
-
-        public GameObject LightParentGao;
 
         // Use this for initialization
         void Start()
@@ -53,7 +65,7 @@ namespace OpenSpaceImplementation.Unity {
             backgroundScroll.mat = null;*/
         }
 
-        public LightInfo GetLight(string offset)
+        public LightBehaviour GetLight(string offset)
         {
             return Lights.Find(l => l.offsetString == offset);
         }
@@ -63,39 +75,50 @@ namespace OpenSpaceImplementation.Unity {
         {
             if (_enableLighting != enableLighting) {
                 _enableLighting = enableLighting;
-                Shader.SetGlobalFloat("_DisableLighting", enableLighting ? 0f : 1f);
             }
             if (_enableFog != enableFog) {
                 _enableFog = enableFog;
-                Shader.SetGlobalFloat("_DisableFog", enableFog ? 0f : 1f);
+                
             }
             if (_luminosity != luminosity) {
                 _luminosity = luminosity;
-                Shader.SetGlobalFloat("_Luminosity", luminosity);
+                
             }
             if (_saturate != saturate) {
                 _saturate = saturate;
-                Shader.SetGlobalFloat("_Saturate", saturate ? 1f : 0f);
             }
+
+            Shader.SetGlobalFloat("_DisableLighting", enableLighting ? 0f : 1f);
+            Shader.SetGlobalFloat("_DisableFog", enableFog ? 0f : 1f);
+            Shader.SetGlobalFloat("_Luminosity", luminosity);
+            Shader.SetGlobalFloat("_Saturate", saturate ? 1f : 0f);
 
             // Update background color or material
             Color? backgroundColor = null;
             VisualMaterial skyMaterial = null;
             Sector activeBackgroundSector = null;
+
+            Controller.SectorManager.RecalculateSectorLighting();
+
             /*if (MapLoader.Loader.globals != null && MapLoader.Loader.globals.backgroundGameMaterial != null && MapLoader.Loader.globals.backgroundGameMaterial.visualMaterial != null) {
                 skyMaterial = MapLoader.Loader.globals.backgroundGameMaterial.visualMaterial;
             } else {*/ 
                 if (sectorManager != null && sectorManager.Sectors != null && sectorManager.Sectors.Count > 0) {
-                    foreach (Sector s in sectorManager.Sectors.Values) {
+                    foreach (Sector s in sectorManager.Sectors) {
                         if (!s.Active) continue;
                         if (s.skyMaterial != null && s.skyMaterial.textures.Count > 0 && s.skyMaterial.textures.Where(t => t.texture != null).Count() > 0) {
                             skyMaterial = s.skyMaterial;
                             activeBackgroundSector = s;
                             break;
                         } else {
-                            foreach (LightInfo li in s.Lights) {
-                                if (li.type == 6) {
-                                    backgroundColor = li.background_color;
+                            foreach (LightBehaviour li in s.Lights) {
+
+                                if (li == null) {
+                                    continue;
+                                }
+
+                                if (li.lightInfo.type == 6) {
+                                    backgroundColor = li.lightInfo.background_color;
                                     break;
                                 }
                             }
@@ -201,14 +224,18 @@ namespace OpenSpaceImplementation.Unity {
 
         public void LoadLights(GameObject root, Dictionary<string, LightInfo> lights)
         {
-            this.Lights = lights.Values.ToList();
             this.LightParentGao = root;
 
             foreach(var lightPair in lights) {
-                LightInfo l = lightPair.Value;
-                l.offsetString = lightPair.Key;
-                l.CreateGameObject();
-                Register(l);
+                LightInfo lightInfo = lightPair.Value;
+                
+                LightBehaviour light = lightInfo.CreateGameObject();
+                light.offsetString = lightPair.Key;
+                
+                // Register light
+                light.lightManager = this;
+                light.Init();
+                light.transform.parent = LightParentGao.transform;
             }
 
             if (useDefaultSettings) {
@@ -219,10 +246,7 @@ namespace OpenSpaceImplementation.Unity {
 
         public void Register(LightInfo light)
         {
-            LightBehaviour l = light.Light;
-            l.lightManager = this;
-            l.Init();
-            l.transform.parent = LightParentGao.transform;
+            
         }
 
         public void RecalculateSectorLighting()

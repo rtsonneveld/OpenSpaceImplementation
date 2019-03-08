@@ -11,12 +11,20 @@ using UnityEngine;
 namespace OpenSpaceImplementation.Sectors {
     public class Sector : MonoBehaviour {
 
+        public string offsetString;
         public VisualMaterial skyMaterial;
         public BoundingVolume sectorBorder;
         public List<Sector> Neighbours = new List<Sector>();
         public List<MeshObject> Visuals = new List<MeshObject>();
         public List<CollideMeshObject> Collision = new List<CollideMeshObject>();
-        public List<LightInfo> Lights = new List<LightInfo>();
+
+        public List<LightBehaviour> Lights
+        {
+            get
+            {
+                return Controller.LightManager.GetLightsForSector(this);
+            }
+        }
 
         public void CreateGameObjects()
         {

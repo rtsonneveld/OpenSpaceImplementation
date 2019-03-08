@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace OpenSpaceImplementation.LevelLoading {
@@ -108,6 +109,8 @@ namespace OpenSpaceImplementation.LevelLoading {
 
             Controller.SectorManager.LoadSectors(sectorsRoot, level.WorldData.Sectors);
             Controller.SectorManager.RecalculateSectorLighting();
+
+            Controller.SetDirty();
         }
     }
 }
