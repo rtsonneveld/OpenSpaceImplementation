@@ -11,7 +11,7 @@ namespace OpenSpaceImplementation {
         //List<Macro> macros;
         OpenSpaceImplementation.AI.Perso Perso;
 
-        public State ActiveState;
+        public AIState ActiveState;
 
         public bool Busy { get; private set; } = false;
 
@@ -47,7 +47,7 @@ namespace OpenSpaceImplementation {
 
         public void SetState(Func<Task> state)
         {
-            this.ActiveState = State.Create(state);
+            this.ActiveState = AIState.Create(state);
         }
 
     }

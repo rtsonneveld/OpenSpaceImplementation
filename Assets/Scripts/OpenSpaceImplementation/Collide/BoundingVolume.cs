@@ -2,6 +2,8 @@
 using UnityEngine;
 
 namespace OpenSpaceImplementation.Collide {
+
+    [Serializable]
     public class BoundingVolume {
 
         public enum Type {

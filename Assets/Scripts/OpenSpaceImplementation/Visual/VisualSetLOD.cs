@@ -6,7 +6,9 @@ using System.Text;
 using UnityEngine;
 
 namespace OpenSpaceImplementation.Visual {
-    public struct VisualSetLOD {
+
+    [Serializable]
+    public class VisualSetLOD {
         public float LODdistance;
         public IGeometricObject obj;
     }

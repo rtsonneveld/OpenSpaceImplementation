@@ -8,7 +8,7 @@ namespace OpenSpaceImplementation.Sound {
     public class SoundEvent {
         public static SoundEvent FromID(int v)
         {
-            return Controller.SoundManager.GetResource(v.ToString());
+            return Controller.SoundManager.GetResource<SoundEvent>(v.ToString());
         }
     }
 }

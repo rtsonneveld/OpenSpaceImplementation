@@ -9,6 +9,8 @@ namespace OpenSpaceImplementation.Collide {
     /// <summary>
     /// Mesh data (both static and dynamic)
     /// </summary>
+    
+    [Serializable]
     public class CollideMeshObject {
         //public PhysicalObject po;
         public CollideType type;

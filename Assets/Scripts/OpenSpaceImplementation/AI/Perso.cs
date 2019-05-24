@@ -6,9 +6,17 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using OpenSpaceImplementation.Animation;
+using OpenSpaceImplementation.Object.Properties;
 
 namespace OpenSpaceImplementation.AI {
+
+    [Serializable]
     public partial class Perso : MonoBehaviour {
+
+        // "Always" objects are spawnable
+        public bool IsAlways { get; internal set; }
+
+        public Perso3dData Perso3dData = new Perso3dData();
 
         protected StateMachine smRule;
         protected StateMachine smReflex;
@@ -16,14 +24,15 @@ namespace OpenSpaceImplementation.AI {
         public CustomBits customBits;
 
         // Health, air magic
-        public int MaxHitPoints;
+        
         public int HitPoints;
-
-        public int MaxAirPoints;
+        public int MaxHitPoints;
+        
         public int AirPoints;
-
-        public int MaxMagicPoints;
+        public int MaxAirPoints;
+        
         public int MagicPoints;
+        public int MaxMagicPoints;
 
         // Used for scripts:
         protected int globalRandomizer;

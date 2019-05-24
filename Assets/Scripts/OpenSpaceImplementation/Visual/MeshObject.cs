@@ -10,6 +10,8 @@ namespace OpenSpaceImplementation.Visual {
     /// <summary>
     /// Mesh data (both static and dynamic)
     /// </summary>
+
+    [Serializable]
     public class MeshObject : IGeometricObject {
         
         public uint lookAtMode;

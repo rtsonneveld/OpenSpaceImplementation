@@ -173,7 +173,7 @@ namespace OpenSpaceImplementation.Visual {
 
         public static VisualMaterial FromHash(string hash)
         {
-            return Controller.VisualMaterialManager.GetResource(hash);
+            return Controller.VisualMaterialManager.GetResource<VisualMaterial>(hash);
         }
 
 

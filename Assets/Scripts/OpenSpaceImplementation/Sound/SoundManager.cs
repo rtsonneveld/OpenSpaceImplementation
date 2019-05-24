@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OpenSpaceImplementation.Sound {
 
-    public class SoundManager : GenericResourceManager<SoundEvent>{
+    public class SoundManager : GenericResourceManager {
 
     }
 }

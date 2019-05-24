@@ -8,6 +8,8 @@ using System.Text;
 using UnityEngine;
 
 namespace OpenSpaceImplementation.Collide {
+
+    [Serializable]
     public class CollideSpheresElement : ICollideGeometricElement {
         public class IndexedSphere {
             public float radius;

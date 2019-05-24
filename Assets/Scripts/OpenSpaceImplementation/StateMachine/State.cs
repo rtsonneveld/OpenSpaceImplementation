@@ -5,15 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace OpenSpaceImplementation {
-    public class State {
+    public class AIState {
         public StateMachine stateMachine;
         public Func<Task> action;
 
-        private State(){}
+        private AIState(){}
 
-        public static State Create(Func<Task> action)
+        public static AIState Create(Func<Task> action)
         {
-            State state = new State();
+            AIState state = new AIState();
             state.action = action;
             return state;
         }

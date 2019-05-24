@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System;
+using UnityEditor;
+using UnityEngine;
+using UnityEditor.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace OpenSpaceImplementation {
-    using System;
-    using UnityEditor;
-    using UnityEngine;
-    using UnityEditor.SceneManagement;
-    using Object = UnityEngine.Object;
 
     // Copied from https://forum.unity.com/threads/scripted-scene-changes-not-being-saved.526453/ (author: Baste)
 
@@ -18,7 +18,7 @@ namespace OpenSpaceImplementation {
     /// Undo or SerializableObject, this is how to actually dirty objects.
     /// </summary>
     public static class EditorFix {
-        public static void SetObjectDirty(Object o)
+        public static void SetObjectDirty(UnityEngine.Object o)
         {
             if (Application.isPlaying)
                 return;

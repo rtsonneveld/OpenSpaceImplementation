@@ -61,7 +61,7 @@ namespace OpenSpaceImplementation.Visual {
         public Texture2D Texture {
             get {
                 if (texture==null) {
-                    SetTexture(Controller.TextureManager.LoadResource(this.name));
+                    SetTexture(Controller.TextureManager.GetResource<Texture2D>(this.name));
                 }
                 return texture;
             }

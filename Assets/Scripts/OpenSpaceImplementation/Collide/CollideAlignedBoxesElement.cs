@@ -7,6 +7,8 @@ using System.Text;
 using UnityEngine;
 
 namespace OpenSpaceImplementation.Collide {
+
+    [Serializable]
     public class CollideAlignedBoxesElement : ICollideGeometricElement {
         public class IndexedAlignedBox {
             public ushort minPoint;

@@ -21,7 +21,7 @@ namespace OpenSpaceImplementation.General {
 
         public static GameMaterial FromHash(string hash)
         {
-            return Controller.GameMaterialManager.GetResource(hash);
+            return Controller.GameMaterialManager.GetResource<GameMaterial>(hash);
         }
 
         public class GameMaterialReferenceJsonConverter : JsonConverter {

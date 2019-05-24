@@ -42,6 +42,8 @@ namespace OpenSpaceImplementation {
             GameMaterialManager.ClearResources();
             VisualMaterialManager.ClearResources();
             TextureManager.ClearResources();
+            FamilyManager.ClearResources();
+            ObjectListManager.ClearResources();
         }
 
         public void Update()
@@ -86,11 +88,21 @@ namespace OpenSpaceImplementation {
 
         public static LightManager LightManager => controllerGAO.transform.Find("LightManager")?.GetComponent<LightManager>();
 
+        public static PersoManager PersoManager => controllerGAO.transform.Find("PersoManager")?.GetComponent<PersoManager>();
+
+        public static FamilyManager FamilyManager => controllerGAO.transform.Find("FamilyManager")?.GetComponent<FamilyManager>();
+
+        public static ObjectListManager ObjectListManager => controllerGAO.transform.Find("ObjectListManager")?.GetComponent<ObjectListManager>();
+
         public static void SetDirty()
         {
             EditorFix.SetObjectDirty(ControllerInstance);
             EditorFix.SetObjectDirty(SectorManager);
             EditorFix.SetObjectDirty(LightManager);
+            EditorFix.SetObjectDirty(PersoManager);
+            EditorFix.SetObjectDirty(FamilyManager);
+            EditorFix.SetObjectDirty(ObjectListManager);
+            EditorFix.SetObjectDirty(ControllerInstance.WorldRootGAO);
         }
     }
 

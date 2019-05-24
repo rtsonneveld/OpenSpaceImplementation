@@ -11,10 +11,10 @@ using UnityEngine;
 
 namespace OpenSpaceImplementation.Materials {
 
-    public class TextureManager : GenericResourceManager<Texture2D>{
+    public class TextureManager : GenericResourceManager {
         public string TextureFolder = "Textures";
 
-        public override Texture2D LoadResource(string texturePath)
+        public override object LoadResource(string texturePath)
         {
             string fullTexturePath = Path.Combine(TextureFolder, texturePath);
             //byte[] textureBytes = File.ReadAllBytes(fullTexturePath);

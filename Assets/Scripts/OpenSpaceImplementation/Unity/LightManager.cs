@@ -55,6 +55,8 @@ namespace OpenSpaceImplementation.Unity {
             Shader.SetGlobalFloat("_Luminosity", luminosity);
             Shader.SetGlobalFloat("_Saturate", saturate ? 1f : 0f);
 
+            RecalculateSectorLighting();
+
             // Set background UVs
             /*Mesh mesh = backgroundPanel.GetComponent<MeshFilter>().sharedMesh;
             List<Vector2> uvs = new List<Vector2>();
@@ -97,8 +99,6 @@ namespace OpenSpaceImplementation.Unity {
             Color? backgroundColor = null;
             VisualMaterial skyMaterial = null;
             Sector activeBackgroundSector = null;
-
-            Controller.SectorManager.RecalculateSectorLighting();
 
             /*if (MapLoader.Loader.globals != null && MapLoader.Loader.globals.backgroundGameMaterial != null && MapLoader.Loader.globals.backgroundGameMaterial.visualMaterial != null) {
                 skyMaterial = MapLoader.Loader.globals.backgroundGameMaterial.visualMaterial;
